@@ -1,3 +1,6 @@
+cache/*
+content
+
 composer.lock
 composer.phar
 vendor/twig/twig/doc/*

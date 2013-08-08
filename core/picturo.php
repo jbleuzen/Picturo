@@ -23,7 +23,7 @@ class Picturo {
     $this->run_hooks('config_loaded', array(&$settings));
 
     // Load plugins
-    $this->load_plugins();
+    //$this->load_plugins();
     $this->run_hooks('plugins_loaded');
 
     // Get request url and script url
@@ -38,15 +38,76 @@ class Picturo {
     $url = preg_replace('/\?.*/', '', $url); // Strip query string
     $this->run_hooks('request_url', array(&$url));
 
-    // Get the file path
-    if($url) $file = CONTENT_DIR . $url;
-    else $file = CONTENT_DIR .'index';
 
-    // Load the file
-    if(is_dir($file)) {
-      $file = CONTENT_DIR . $url .'/index'. CONTENT_EXT;
-    } else { 
-      $file .= CONTENT_EXT;
+    // Create cache folder
+    if(! is_dir(CACHE_DIR . $url)) {
+      echo "Create folder";
+      mkdir(CACHE_DIR . $url);
+    }
+
+    // Get the file path
+    $resource = CONTENT_DIR . $url;
+    if(is_dir($resource)) {
+      $folders = array();
+      $images = array();
+      $this->get_files($resource, &$folders, &$images);
+
+      foreach($folders as &$folder) {
+        $tmp_array = array();
+        $tmp_array['name'] = basename($folder);
+        $files = glob("$folder/*.{jpg,jpeg,JPG,JPEG}", GLOB_BRACE);
+        $tmp_array['images_count'] = count($files);
+        //$folders = glob("$folder/*", GLOB_ONLYDIR);
+        //$tmp_array['folders_count'] = count($folders);
+
+        $tmp_array['last_modified'] = date ("F d Y H:i:s.", filemtime($folder));
+        // Generate thumbnail
+        if( ! file_exists(CACHE_DIR. "folders/" . basename($files[0]))) {
+          $this->make_thumb($files[0], CACHE_DIR. "folders/" . basename($files[0]), 294, 200);
+        }
+        $tmp_array['thumbnail'] = "/cache/folders/". basename($files[0]);
+
+        // TODO : Find a better way to handle this
+        if($this->url == "") {
+          $tmp_array['url'] =  $twig_vars['base_url'].'/' . $this->url . strtolower(str_replace(" ", "_", $tmp_array['name']));
+        } else {
+          $tmp_array['url'] =  $twig_vars['base_url'].'/' . $this->url . "/" . strtolower(str_replace(" ", "_", $tmp_array['name']));
+        }
+        var_dump($tmp_array);
+        $folder = $tmp_array;
+      } 
+
+      $this->items_per_page = 15;
+      $this->current_page = 0;
+
+      $start = $this->current_page * $this->items_per_page;
+      for($i = 0; $i < $this->items_per_page; $i++) {
+        $image = $images[$i + $start];
+        if(isset($image) && ! empty($image)) {
+          $temp_array = array();
+
+          // Generate thumbnail
+          if( ! file_exists(CACHE_DIR. $url . "/" . basename($image))) {
+            $this->make_thumb($image, CACHE_DIR. $url . "/" . basename($image));
+          }
+          $temp_array['thumbnail'] = "/lib/cache/" . $url . "/" . basename($image);
+
+          // lazy link to the image
+          $temp_array['url'] = $twig_vars['base_url'].'/'. $this->url . "/" . basename($image);
+          // read the image info and assign the width and height
+          $image_info = getimagesize($temp_array['thumbnail']);
+          $temp_array['width'] = $image_info[0];
+          $temp_array['height'] = $image_info[1];
+          // strip the folder names and just leave the end piece without the extension
+          $temp_array['name'] = basename($image);
+
+          $twig_vars['images'][$i] = $temp_array;
+        }
+
+
+      }
+    } else {
+      echo "DETAIL VIEW";
     }
 
     $this->run_hooks('before_load_content', array(&$file));
@@ -59,22 +120,6 @@ class Picturo {
       $this->run_hooks('after_404_load_content', array(&$file, &$content));
     }
     $this->run_hooks('after_load_content', array(&$file, &$content));
-
-    // Get all the pages
-    $pages = $this->get_pages($settings['base_url'], $settings['pages_order_by'], $settings['pages_order'], $settings['excerpt_length']);
-    $prev_page = array();
-    $current_page = array();
-    $next_page = array();
-    while($current_page = current($pages)){
-      if($meta['title'] == $current_page['title']){
-        break;
-      }
-      next($pages);
-    }
-    $prev_page = next($pages);
-    prev($pages);
-    $next_page = prev($pages);
-    $this->run_hooks('get_pages', array(&$pages, &$current_page, &$prev_page, &$next_page));
 
     // Load the theme
     $this->run_hooks('before_twig_register');
@@ -89,18 +134,32 @@ class Picturo {
       'theme_dir' => THEMES_DIR . $settings['theme'],
       'theme_url' => $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'],
       'site_title' => $settings['site_title'],
-      'meta' => $meta,
-      'content' => $content,
-      'pages' => $pages,
-      'prev_page' => $prev_page,
-      'current_page' => $current_page,
-      'next_page' => $next_page,
-      'is_front_page' => $url ? false : true,
+      'folders' => $folders
     );
     $this->run_hooks('before_render', array(&$twig_vars, &$twig));
     $output = $twig->render('index.html', $twig_vars);
     $this->run_hooks('after_render', array(&$output));
     echo $output;
+    var_dump($twig_vars);
+  }
+
+
+  private function get_files($path, &$folders, &$images) {
+    if($handle = opendir($path)){
+      while(false !== ($file = readdir($handle))){
+        if(substr($file,0,1) != "."){
+          $file = $path . "/" . $file;
+          $file = preg_replace("/\/\//si", "/", $file);
+          if( is_dir($file)){
+            array_push($folders, $file);
+          }
+          if(is_file($file)) {
+            array_push($images, $file);
+          }
+        }
+      }
+      closedir($handle);
+    }
   }
 
   /**
@@ -215,6 +274,31 @@ class Picturo {
     }
   }
 
+  private function make_thumb($src, $dest, $thumb_w = 174, $thumb_h = 174) {
+    $srcimg = imagecreatefromjpeg($src);
+    $src_w = imagesx($srcimg);
+    $src_h = imagesy($srcimg);
+    $src_ratio = $src_w/$src_h;
+    if (1 > $src_ratio) {
+      $new_h = $thumb_w/$src_ratio;
+      $new_w = $thumb_w;
+    } else {
+      $new_w = $thumb_h*$src_ratio;
+      $new_h = $thumb_h;
+    }
+    $x_mid = $new_w/2;
+    $y_mid = $new_h/2;
+    $newpic = imagecreatetruecolor(round($new_w), round($new_h));
+    imagecopyresampled($newpic, $srcimg, 0, 0, 0, 0, $new_w, $new_h, $src_w, $src_h);
+    $final = imagecreatetruecolor($thumb_w, $thumb_h);
+    imagecopyresampled($final, $newpic, 0, 0, ($x_mid-($thumb_w/2)), ($y_mid-($thumb_h/2)), $thumb_w, $thumb_h, $thumb_w, $thumb_h);
+    imagedestroy($newpic);
+    imagedestroy($srcimg);
+
+    imagejpeg($final, $dest, 80); //again, assuming jpeg, 80% quality
+  }
+
+
   /**
    * Helper function to work out the base URL
    *
@@ -239,34 +323,8 @@ class Picturo {
    * @return string the current protocol
    */
   private function get_protocol() {
-    preg_match("|^HTTP[S]?|is",$_SERVER['SERVER_PROTOCOL'],$m);
+    preg_match("|^HTTP[S]?|is", $_SERVER['SERVER_PROTOCOL'], $m);
     return strtolower($m[0]);
-  }
-
-  /**
-   * Helper function to recusively get all files in a directory
-   *
-   * @param string $directory start directory
-   * @param string $ext optional limit to file extensions
-   * @return array the matched files
-   */ 
-  private function get_files($directory, $ext = '')
-  {
-    $array_items = array();
-    if($handle = opendir($directory)){
-      while(false !== ($file = readdir($handle))){
-        if($file != "." && $file != ".."){
-          if(is_dir($directory. "/" . $file)){
-            $array_items = array_merge($array_items, $this->get_files($directory. "/" . $file, $ext));
-          } else {
-            $file = $directory . "/" . $file;
-            if(!$ext || strstr($file, $ext)) $array_items[] = preg_replace("/\/\//si", "/", $file);
-          }
-        }
-      }
-      closedir($handle);
-    }
-    return $array_items;
   }
 
 }
