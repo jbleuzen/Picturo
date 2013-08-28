@@ -201,14 +201,14 @@ blockquote {
 /* Structure Styles
 /*---------------------------------------------*/
 .inner {
-	width: 850px;
+	width: 900px;
 	margin: 0 auto;
 }
 
 #header {
 	background: #2EAE9B;
 	padding: 60px 0;
-	margin-bottom: 80px;
+	margin-bottom: 4em;
 	color: #afe1da;
 }
 #header a { color: #afe1da; }
@@ -254,3 +254,28 @@ blockquote {
     *zoom: 1;
 }
 
+.inner .image, .inner .folder {
+  display: inline-block;
+}
+.inner .folder {
+  border-radius: 4px;
+  background: #ecf0f1;
+  margin-bottom: 2em;
+}
+.inner .folder:hover {
+  background: #bdc3c7;
+}
+.inner .folder p {
+  text-align:center;
+}
+.inner .folder img {
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #ecf0f1;
+  border-bottom: none;
+}
+.inner .image img {
+  border: 1px solid #bdc3c7;
+}
+.inner .detail {
+  max-width: 900px;
+}

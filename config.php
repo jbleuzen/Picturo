@@ -22,4 +22,12 @@ $config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_set
 
 */
 
+
+// TODO add
+// size of thumbnails
+// images extensions
+// images sort
+// items_per_page
+// cache_path (http://test.dev/thumbnails/path/image_XxX.jpg)
+
 ?>

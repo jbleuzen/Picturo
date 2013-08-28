@@ -24,7 +24,7 @@ class Picturo {
 
     // Load plugins
     //$this->load_plugins();
-    $this->run_hooks('plugins_loaded');
+    //$this->run_hooks('plugins_loaded');
 
     // Get request url and script url
     $url = '';
@@ -36,21 +36,21 @@ class Picturo {
       $url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
     }
     $url = preg_replace('/\?.*/', '', $url); // Strip query string
+    $url = urldecode($url);
     $this->run_hooks('request_url', array(&$url));
-
-
-    // Create cache folder
-    if(! is_dir(CACHE_DIR . $url)) {
-      echo "Create folder";
-      mkdir(CACHE_DIR . $url);
-    }
 
     // Get the file path
     $resource = CONTENT_DIR . $url;
+
+    // Create cache folder
+    if(! is_dir(CACHE_DIR . $url) && is_dir($resource)) {
+      mkdir(CACHE_DIR . $url);
+    }
+
     if(is_dir($resource)) {
       $folders = array();
-      $images = array();
-      $this->get_files($resource, &$folders, &$images);
+      $imagesArray = array();
+      $this->get_files($resource, &$folders, &$imagesArray);
 
       foreach($folders as &$folder) {
         $tmp_array = array();
@@ -68,12 +68,12 @@ class Picturo {
         $tmp_array['thumbnail'] = "/cache/folders/". basename($files[0]);
 
         // TODO : Find a better way to handle this
-        if($this->url == "") {
-          $tmp_array['url'] =  $twig_vars['base_url'].'/' . $this->url . strtolower(str_replace(" ", "_", $tmp_array['name']));
+        // TODO : escape strange characters
+        if($url == "") {
+          $tmp_array['url'] =   $settings['base_url'] .'/' . strtolower(urlencode($tmp_array['name']));
         } else {
-          $tmp_array['url'] =  $twig_vars['base_url'].'/' . $this->url . "/" . strtolower(str_replace(" ", "_", $tmp_array['name']));
+          $tmp_array['url'] =   $settings['base_url'] .'/' . $url . "/" . strtolower(urlencode($tmp_array['name']));
         }
-        var_dump($tmp_array);
         $folder = $tmp_array;
       } 
 
@@ -81,8 +81,9 @@ class Picturo {
       $this->current_page = 0;
 
       $start = $this->current_page * $this->items_per_page;
+      $images = Array();
       for($i = 0; $i < $this->items_per_page; $i++) {
-        $image = $images[$i + $start];
+        $image = $imagesArray[$i + $start];
         if(isset($image) && ! empty($image)) {
           $temp_array = array();
 
@@ -90,24 +91,28 @@ class Picturo {
           if( ! file_exists(CACHE_DIR. $url . "/" . basename($image))) {
             $this->make_thumb($image, CACHE_DIR. $url . "/" . basename($image));
           }
-          $temp_array['thumbnail'] = "/lib/cache/" . $url . "/" . basename($image);
+          $temp_array['thumbnail'] = "/cache/" . $url . "/" . basename($image);
 
           // lazy link to the image
-          $temp_array['url'] = $twig_vars['base_url'].'/'. $this->url . "/" . basename($image);
-          // read the image info and assign the width and height
-          $image_info = getimagesize($temp_array['thumbnail']);
-          $temp_array['width'] = $image_info[0];
-          $temp_array['height'] = $image_info[1];
+          $temp_array['url'] =  $settings['base_url'] .'/'. urlencode($url) . "/" . urlencode(basename($image));
           // strip the folder names and just leave the end piece without the extension
           $temp_array['name'] = basename($image);
 
-          $twig_vars['images'][$i] = $temp_array;
+          $images[$i] = $temp_array;
         }
 
 
       }
     } else {
-      echo "DETAIL VIEW";
+      echo "DETAIL VIEW $resource";
+      
+      if(is_file($resource)) {
+         //TODO Find next previous
+        echo "ok " . CONTENT_DIR;
+          $image_url = "/content/" . str_replace(CONTENT_DIR, "", $resource);
+          $twig_vars["is_image"] = true;
+          
+      }
     }
 
     $this->run_hooks('before_load_content', array(&$file));
@@ -134,13 +139,14 @@ class Picturo {
       'theme_dir' => THEMES_DIR . $settings['theme'],
       'theme_url' => $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'],
       'site_title' => $settings['site_title'],
-      'folders' => $folders
+      'folders' => $folders,
+      'images' => $images,
+      'image_url' => $image_url
     );
     $this->run_hooks('before_render', array(&$twig_vars, &$twig));
     $output = $twig->render('index.html', $twig_vars);
     $this->run_hooks('after_render', array(&$output));
     echo $output;
-    var_dump($twig_vars);
   }
 
 

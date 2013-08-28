@@ -1,66 +1,62 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-<head>
-	<meta charset="utf-8" />
-	
-	<title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_title }}</title>
-{% if meta.description %}
-	<meta name="description" content="{{ meta.description }}"> 
-{% endif %}{% if meta.robots %}
-	<meta name="robots" content="{{ meta.robots }}">
-{% endif %}
+  <head>
+    <meta charset="utf-8" />
+    <title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_title }}</title>
 
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css" />
-<link rel="stylesheet" href="{{ theme_url }}/style.css" type="text/css" />
-
-<script src="{{ theme_url }}/scripts/modernizr-2.6.1.min.js"></script>
-</head>
-<body>
-
-<header id="header">
-  <div class="inner clearfix">
-    <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
-  </div>
-</header>
-
-<section id="content">
-  <div class="inner">
-    {% if folders %}
-    <section class="folders">
-      {% for folder in folders%}
-      <div class="folder">
-        <a href="{{ folder.url }}">
-          <p>
-          <span class="title">{{ folder.name }}</span>
-          <span class="images-count">{{ folder.images_count }}</span>
-          {% if folder.folders_count > 0 %}
-          <span class="folders-count">{{ folder.folders_count }}</span>
-          {% endif %}
-          </p>
-          <img src="{{ folder.thumbnail }}" width="294" height="200" />
-        </a>
-      </div>
-      {% endfor %}
-    </section>
+    {% if meta.description %}
+    <meta name="description" content="{{ meta.description }}"> 
+    {% endif %}{% if meta.robots %}
+    <meta name="robots" content="{{ meta.robots }}">
     {% endif %}
-    <section class="images">
-      {% for image in images %}
-      <div class="image">
-        <a href="{{ image.url }}">
-          <img src="{{ image.thumbnail }}" alt="{{ image.name }}" width="{{ image.width }}" height="{{ image.height }}">
-        </a>
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css" />
+    <link rel="stylesheet" href="{{ theme_url }}/style.css" type="text/css" />
+
+    <script src="{{ theme_url }}/scripts/modernizr-2.6.1.min.js"></script>
+  </head>
+  <body>
+
+    <header id="header">
+      <div class="inner clearfix">
+        <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
       </div>
-      {% endfor %}
-    </section>
-  </div>
-</section>
+    </header>
+    <div id="content">
+      <div class="inner">
+        {% if image_url %}
+        <img class="detail" src="{{ image_url }}"/>
+        {% endif %}
+        {% if folders %}
+        <div class="folders">
+          {% for folder in folders%}
+          <div class="folder">
+            <a href="{{ folder.url }}">
+              <img src="{{ folder.thumbnail }}" width="294" height="200" />
+              <p>{{ folder.name }}</p>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="images">
+          {% for image in images %}
+          <div class="image">
+            <a href="{{ image.url }}">
+              <img src="{{ image.thumbnail }}" alt="{{ image.name }}" width="{{ image.width }}" height="{{ image.height }}">
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
 
-<footer id="footer">
-  <div class="inner">
-    <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 
-    from <a href="http://dev7studios.com">Dev7studios</a>.
-  </div>
-</footer>
+    <footer id="footer">
+      <div class="inner">
+        <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 
+        from <a href="http://dev7studios.com">Dev7studios</a>.
+      </div>
+    </footer>
 
-</body>
+  </body>
 </html>
