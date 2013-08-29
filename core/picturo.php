@@ -104,14 +104,29 @@ class Picturo {
 
       }
     } else {
-      echo "DETAIL VIEW $resource";
+      //echo "DETAIL VIEW $resource";
       
       if(is_file($resource)) {
-         //TODO Find next previous
-        echo "ok " . CONTENT_DIR;
-          $image_url = "/content/" . str_replace(CONTENT_DIR, "", $resource);
-          $twig_vars["is_image"] = true;
-          
+        //TODO Find next previous files
+        echo dirname($resource);
+         $folders = array();
+      $imagesArray = array();
+
+        $this->get_files(dirname($resource)."/", &$folders, &$imagesArray);
+        $previous = "";
+        $next = "";
+       for($i = 0; $i < count($imagesArray); $i++) {
+         if($imagesArray[$i] == $resource){
+           $previous = $imagesArray[$i-1];
+           $next = $imagesArray[$i+1];
+           break;
+         }
+        }
+        $image_url = "/content/" . str_replace(CONTENT_DIR, "", $resource);
+        $image_previous_url =  "/" . str_replace(CONTENT_DIR, "", $previous);
+        $image_next_url = "/" . str_replace(CONTENT_DIR, "", $next);
+        $twig_vars["is_image"] = true;
+
       }
     }
 
@@ -141,7 +156,9 @@ class Picturo {
       'site_title' => $settings['site_title'],
       'folders' => $folders,
       'images' => $images,
-      'image_url' => $image_url
+      'image_url' => $image_url,
+      'image_previous_url' => $image_previous_url,
+      'image_next_url' => $image_next_url
     );
     $this->run_hooks('before_render', array(&$twig_vars, &$twig));
     $output = $twig->render('index.html', $twig_vars);
@@ -214,54 +231,6 @@ class Picturo {
     }
 
     return $config;
-  }
-
-  /**
-   * Get a list of pages
-   *
-   * @param string $base_url the base URL of the site
-   * @param string $order_by order by "alpha" or "date"
-   * @param string $order order "asc" or "desc"
-   * @return array $sorted_pages an array of pages
-   */
-  private function get_pages($base_url, $order_by = 'alpha', $order = 'asc', $excerpt_length = 50) {
-    global $config;
-
-    $pages = $this->get_files(CONTENT_DIR, CONTENT_EXT);
-    $sorted_pages = array();
-    $date_id = 0;
-    foreach($pages as $key=>$page){
-      // Skip 404
-      if(basename($page) == '404'. CONTENT_EXT){
-        unset($pages[$key]);
-        continue;
-      }
-
-      // Get title and format $page
-      $page_content = file_get_contents($page);
-      $page_meta = array();
-      $url = str_replace(CONTENT_DIR, $base_url .'/', $page);
-      $url = str_replace('index'. CONTENT_EXT, '', $url);
-      $url = str_replace(CONTENT_EXT, '', $url);
-      $data = array(
-        'title' => $page_meta['title'],
-        'url' => $url,
-        'author' => $page_meta['author'],
-        'date' => $page_meta['date'],
-        'date_formatted' => date($config['date_format'], strtotime($page_meta['date'])),
-        'content' => $page_content,
-      );
-      if($order_by == 'date'){
-        $sorted_pages[$page_meta['date'].$date_id] = $data;
-        $date_id++;
-      }
-      else $sorted_pages[] = $data;
-    }
-
-    if($order == 'desc') krsort($sorted_pages);
-    else ksort($sorted_pages);
-
-    return $sorted_pages;
   }
 
   /**

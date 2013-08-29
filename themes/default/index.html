@@ -25,6 +25,8 @@
     <div id="content">
       <div class="inner">
         {% if image_url %}
+        <a href="{{ image_previous_url }}">PREVIOUS</a>
+        <a href="{{ image_next_url }}">NEXT</a>
         <img class="detail" src="{{ image_url }}"/>
         {% endif %}
         {% if folders %}
