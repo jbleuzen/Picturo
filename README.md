@@ -1,4 +1,7 @@
-Pico
+Picturo
 ====
 
-Pico is a stupidly simple, blazing fast, flat file CMS. See http://pico.dev7studios.com for more info.
+Picturo is a stupidly simple, blazing fast, flat file photo gallery. 
+
+Picturo was inspired by [Pico](https://github.com/gilbitron/Pico).
+See http://picturo.github.com for more info.
