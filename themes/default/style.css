@@ -118,86 +118,6 @@ a:hover, a:active {
 	text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	color: #000;
-	line-height: 1.2em;
-	margin-bottom: 0.6em;
-}
-
-h1 {
-	font-size: 2em;
-}
-
-h2 {
-	font-size: 1.7em;
-}
-
-h3 {
-	font-size: 1.5em;
-	margin-top: 2em;
-}
-
-p {
-	margin-bottom: 1em;
-}
-
-ol, ul {
-	padding-left: 30px;
-	margin-bottom: 1em;
-}
-
-b, strong {
-	font-weight: bold;
-}
-
-i, em {
-	font-style: italic;
-}
-
-u {
-	text-decoration: underline;
-}
-
-abbr, acronym {
-	cursor: help;
-	border-bottom: 0.1em dotted;
-}
-
-td, td img {
-	vertical-align: top;
-}
-
-sub {
-	vertical-align: sub;
-	font-size: smaller;
-}
-
-sup {
-	vertical-align: super;
-	font-size: smaller;
-}
-
-code {
-	font-family: Courier, "Courier New", Monaco, Tahoma;
-	background: #eee;
-	color: #333;
-	padding: 0px 2px;
-}
-
-pre {
-	background: #eee;
-	padding: 20px;
-	margin-bottom: 1em;
-	overflow: auto;
-}
-
-blockquote {
-	font-style: italic;
-	margin: 0 0 1em 15px;
-	padding-left: 10px;
-	border-left: 5px solid #dddddd;
-}
-
 /* Structure Styles
 /*---------------------------------------------*/
 .inner {
@@ -207,8 +127,8 @@ blockquote {
 
 #header {
 	background: #2EAE9B;
-	padding: 3em 0;
-	margin-bottom: 4em;
+	padding: 1em 0;
+	margin-bottom: 3em;
 	color: #afe1da;
 }
 #header a { color: #afe1da; }
@@ -234,7 +154,7 @@ blockquote {
 #footer {
 	background: #707070;
 	padding: 2em 0;
-	margin-top: 4em;
+	margin-top: 3em;
 	color: #C0C0C0;
 }
 #footer a { color: #ddd; }
@@ -302,11 +222,12 @@ img {
 .breadcrumb {
   background: #DADADA;
   color: #666;
-  margin-bottom: 4em;
-  height: 4em;
-  line-height: 4em;
-  font-size: 1.1em;
+  margin-bottom: 3em;
+  height: 3em;
+  line-height: 3em;
+  font-size: 1em;
   border-bottom: 1px solid #CCC;
+  padding-left: 1em;
 }
 .breadcrumb li {
   display:inline-block;
