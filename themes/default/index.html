@@ -6,11 +6,11 @@
 
     {% if meta.description %}
     <meta name="description" content="{{ meta.description }}"> 
-    {% endif %}{% if meta.robots %}
+    {% endif %}
+    {% if meta.robots %}
     <meta name="robots" content="{{ meta.robots }}">
     {% endif %}
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css" />
     <link rel="stylesheet" href="{{ theme_url }}/style.css" type="text/css" />
 
     <script src="{{ theme_url }}/scripts/modernizr-2.6.1.min.js"></script>
@@ -18,12 +18,24 @@
   <body>
 
     <header id="header">
-      <div class="inner">
+      <div class="inner clearfix">
         <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
       </div>
     </header>
     <div id="content">
       <div class="inner">
+        {%if breadcrumb %}
+        <ul class="breadcrumb">
+          {% for link,url in breadcrumb %}
+          <li>
+          {% if url %}
+            <a href="{{ url }}">{{ link }}</a></li>
+          {% else %}
+            {{ link }}
+          {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
         {% if image_url %}
         {% if image_previous_url != '/' %}
         <a href="{{ image_previous_url }}">PREVIOUS</a>
@@ -38,7 +50,7 @@
           {% for folder in folders%}
           <div class="folder">
             <a href="{{ folder.url }}">
-              <img src="{{ folder.thumbnail }}" width="280" height="200" />
+              <img src="{{ folder.thumbnail }}" width="284" height="200" />
               <p>{{ folder.name }}</p>
             </a>
           </div>
@@ -57,7 +69,8 @@
         {% endif %}
       </div>
     </div>
-
+    <!-- Don't do this at home -->
+    <div class="separator clearfix"></div>
     <footer id="footer">
       <div class="inner">
         <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 

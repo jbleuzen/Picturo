@@ -75,7 +75,7 @@ class Picturo {
           $tmp_array['url'] =   $settings['base_url'] .'/' . $url . "/" . strtolower(urlencode($tmp_array['name']));
         }
         $folder = $tmp_array;
-      } 
+      }
 
       $this->items_per_page = 15;
       $this->current_page = 0;
@@ -138,6 +138,20 @@ class Picturo {
     }
     $this->run_hooks('after_load_content', array(&$file, &$content));
 
+    // Generate breadcrumb
+    if($url != "") {
+      $breadcrumb = array('Home' => '/');
+      $key = "";
+      $crumbs = explode("/",$_SERVER["REQUEST_URI"]);
+      array_shift($crumbs);
+      foreach($crumbs as $crumb){
+        $key = urldecode(ucfirst(str_replace(array(".php","_"),array(""," "),$crumb)));
+        $breadcrumb[$key] = substr($_SERVER["REQUEST_URI"], 0,  strpos($_SERVER["REQUEST_URI"], $crumb) + strlen($crumb));
+      }
+      // Remove last url of breadcrumb items
+      $breadcrumb[$key] = "";
+    }
+
     // Load the theme
     $this->run_hooks('before_twig_register');
     Twig_Autoloader::register();
@@ -151,6 +165,7 @@ class Picturo {
       'theme_dir' => THEMES_DIR . $settings['theme'],
       'theme_url' => $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'],
       'site_title' => $settings['site_title'],
+      'breadcrumb' => $breadcrumb,
       'folders' => $folders,
       'images' => $images,
       'image_url' => $image_url,
