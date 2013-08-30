@@ -18,23 +18,27 @@
   <body>
 
     <header id="header">
-      <div class="inner clearfix">
+      <div class="inner">
         <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
       </div>
     </header>
     <div id="content">
       <div class="inner">
         {% if image_url %}
+        {% if image_previous_url != '/' %}
         <a href="{{ image_previous_url }}">PREVIOUS</a>
-        <a href="{{ image_next_url }}">NEXT</a>
-        <img class="detail" src="{{ image_url }}"/>
         {% endif %}
+        {% if image_next_url != '/' %}
+        <a href="{{ image_next_url }}">NEXT</a>
+        {% endif %}
+        <img class="detail" src="{{ image_url }}"/>
+        {% else %}
         {% if folders %}
         <div class="folders">
           {% for folder in folders%}
           <div class="folder">
             <a href="{{ folder.url }}">
-              <img src="{{ folder.thumbnail }}" width="294" height="200" />
+              <img src="{{ folder.thumbnail }}" width="280" height="200" />
               <p>{{ folder.name }}</p>
             </a>
           </div>
@@ -50,6 +54,7 @@
           </div>
           {% endfor %}
         </div>
+        {% endif %}
       </div>
     </div>
 

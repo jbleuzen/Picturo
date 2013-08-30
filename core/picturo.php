@@ -105,28 +105,25 @@ class Picturo {
       }
     } else {
       //echo "DETAIL VIEW $resource";
-      
+
       if(is_file($resource)) {
         //TODO Find next previous files
-        echo dirname($resource);
-         $folders = array();
-      $imagesArray = array();
+        $folders = array();
+        $imagesArray = array();
 
         $this->get_files(dirname($resource)."/", &$folders, &$imagesArray);
         $previous = "";
         $next = "";
-       for($i = 0; $i < count($imagesArray); $i++) {
-         if($imagesArray[$i] == $resource){
-           $previous = $imagesArray[$i-1];
-           $next = $imagesArray[$i+1];
-           break;
-         }
+        for($i = 0; $i < count($imagesArray); $i++) {
+          if($imagesArray[$i] == $resource){
+            $previous = $imagesArray[$i-1];
+            $next = $imagesArray[$i+1];
+            break;
+          }
         }
         $image_url = "/content/" . str_replace(CONTENT_DIR, "", $resource);
         $image_previous_url =  "/" . str_replace(CONTENT_DIR, "", $previous);
         $image_next_url = "/" . str_replace(CONTENT_DIR, "", $next);
-        $twig_vars["is_image"] = true;
-
       }
     }
 

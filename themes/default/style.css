@@ -97,20 +97,20 @@ select:focus {
 /* Main Styles
 /*---------------------------------------------*/
 body {
-	font: 14px/1.8em 'Open Sans', Helvetica, Arial, Helvetica, sans-serif;
+	font: 14px/1.8em Arial, Helvetica, sans-serif;
 	color: #444;
-	background: #fff;
+	background: #EFEFEF;
 	-webkit-font-smoothing: antialiased;
 }
 
 a, a:visited {
 	color: #2EAE9B;
 	text-decoration: none;
-	-webkit-transition: all 0.2s linear;
-	-moz-transition: all 0.2s linear;
-	-ms-transition: all 0.2s linear;
-	-o-transition: all 0.2s linear;
-	transition: all 0.2s linear;
+	-webkit-transition: all 0.3s linear;
+	-moz-transition: all 0.3s linear;
+	-ms-transition: all 0.3s linear;
+	-o-transition: all 0.3s linear;
+	transition: all 0.3s linear;
 }
 
 a:hover, a:active {
@@ -258,23 +258,35 @@ blockquote {
   display: inline-block;
 }
 .inner .folder {
-  border-radius: 4px;
-  background: #ecf0f1;
-  margin-bottom: 2em;
-}
-.inner .folder:hover {
-  background: #bdc3c7;
+  background: #FFF;
+  margin: 0 1em 4em 0;
+  border-bottom: 1px solid #CCC;
+  max-width: 282px;
 }
 .inner .folder p {
   text-align:center;
 }
+img {
+ -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: opacity 0.3s ease-in-out;
+  -ms-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
 .inner .folder img {
-  border-radius: 4px 4px 0 0;
   border: 1px solid #ecf0f1;
+  border-top: 1px solid #FFF;
   border-bottom: none;
 }
+.inner .folder:hover img{
+  opacity: 0.7;
+}
 .inner .image img {
-  border: 1px solid #bdc3c7;
+  border: 1px solid #EEE;
+  border-bottom: 1px solid #CCC;
+}
+.inner .image:hover img {
+  opacity: 0.7;
 }
 .inner .detail {
   max-width: 900px;
