@@ -318,3 +318,25 @@ img {
   content : ' ❯ ';
   margin: 0 0.5em;
 }
+.image-wrapper {
+  position:relative;
+} 
+.image-wrapper img {
+  border-bottom: 1px solid #CCC;
+}
+.previous-image, .next-image {
+  position: absolute;
+  padding: 1em;
+  background:#DADADA;
+  border-bottom: 1px solid #CCC;
+  top: 50%;
+  width: 1em;
+  font-size:2em;
+  text-align:center;
+}
+.previous-image {
+  left: -3em;
+}
+.next-image {
+  right: -3em;
+}

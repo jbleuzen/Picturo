@@ -37,46 +37,49 @@
         </ul>
         {% endif %}
         {% if image_url %}
-        {% if image_previous_url != '/' %}
-        <a href="{{ image_previous_url }}">PREVIOUS</a>
-        {% endif %}
-        {% if image_next_url != '/' %}
-        <a href="{{ image_next_url }}">NEXT</a>
-        {% endif %}
+        <div class="image-wrapper">
+          {% if image_previous_url != '/' %}
+          <a class="previous-image" href="{{ image_previous_url }}">❮</a>
+          {% endif %}
+          {% if image_next_url != '/' %}
+          <a class="next-image" href="{{ image_next_url }}">❯</a>
+          {% endif %}
         <img class="detail" src="{{ image_url }}"/>
-        {% else %}
-        {% if folders %}
-        <div class="folders">
-          {% for folder in folders%}
-          <div class="folder">
-            <a href="{{ folder.url }}">
-              <img src="{{ folder.thumbnail }}" width="284" height="200" />
-              <p>{{ folder.name }}</p>
-            </a>
-          </div>
-          {% endfor %}
-        </div>
-        {% endif %}
-        <div class="images">
-          {% for image in images %}
-          <div class="image">
-            <a href="{{ image.url }}">
-              <img src="{{ image.thumbnail }}" alt="{{ image.name }}" width="{{ image.width }}" height="{{ image.height }}">
-            </a>
-          </div>
-          {% endfor %}
-        </div>
-        {% endif %}
       </div>
+      </div>
+      {% else %}
+      {% if folders %}
+      <div class="folders">
+        {% for folder in folders%}
+        <div class="folder">
+          <a href="{{ folder.url }}">
+            <img src="{{ folder.thumbnail }}" width="284" height="200" />
+            <p>{{ folder.name }}</p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="images">
+        {% for image in images %}
+        <div class="image">
+          <a href="{{ image.url }}">
+            <img src="{{ image.thumbnail }}" alt="{{ image.name }}" width="{{ image.width }}" height="{{ image.height }}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
-    <!-- Don't do this at home -->
-    <div class="separator clearfix"></div>
-    <footer id="footer">
-      <div class="inner">
-        <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 
-        from <a href="http://dev7studios.com">Dev7studios</a>.
-      </div>
-    </footer>
+  </div>
+  <!-- Don't do this at home -->
+  <div class="separator clearfix"></div>
+  <footer id="footer">
+    <div class="inner">
+      <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 
+      from <a href="http://dev7studios.com">Dev7studios</a>.
+    </div>
+  </footer>
 
-  </body>
+</body>
 </html>
