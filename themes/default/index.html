@@ -5,7 +5,7 @@
     <title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_title }}</title>
 
     {% if meta.description %}
-    <meta name="description" content="{{ meta.description }}"> 
+    <meta name="description" content="{{ meta.description }}">
     {% endif %}
     {% if meta.robots %}
     <meta name="robots" content="{{ meta.robots }}">
@@ -70,13 +70,28 @@
         {% endfor %}
       </div>
       {% endif %}
+      {% if page_count > 1 %}
+      <ul class="pagination" style="clear:both">
+        {% for i in 1..page_count %}
+        {% if current_page + 1 == i %}
+        <li class="current">{{ i }}</li>
+        {% else %}
+        {% if i == 1 %}
+        <li><a href="{{ url }}">{{ i }}</a></li>
+        {% else %}
+        <li><a href="{{ url }}/page{{ i }}"> {{ i }}</a></li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
     </div>
   </div>
   <!-- Don't do this at home -->
   <div class="separator clearfix"></div>
   <footer id="footer">
     <div class="inner">
-      <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> 
+      <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a>
       from <a href="http://dev7studios.com">Dev7studios</a>.
     </div>
   </footer>

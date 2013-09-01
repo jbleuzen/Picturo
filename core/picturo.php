@@ -37,6 +37,12 @@ class Picturo {
     }
     $url = preg_replace('/\?.*/', '', $url); // Strip query string
     $url = urldecode($url);
+
+     // Match page[0-9]
+    if(preg_match("/\/page([0-9]+)$/", $url, $page)) {
+      $this->current_page = $page[1] - 1;
+      $url = str_replace($page[0], "", $url);
+    }
     $this->run_hooks('request_url', array(&$url));
 
     // Get the file path
@@ -68,7 +74,6 @@ class Picturo {
         $tmp_array['thumbnail'] = "/cache/folders/". basename($files[0]);
 
         // TODO : Find a better way to handle this
-        // TODO : escape strange characters
         if($url == "") {
           $tmp_array['url'] =   $settings['base_url'] .'/' . strtolower(urlencode($tmp_array['name']));
         } else {
@@ -78,7 +83,8 @@ class Picturo {
       }
 
       $this->items_per_page = 15;
-      $this->current_page = 0;
+
+      $this->page_count = ceil(count($imagesArray) / $this->items_per_page);
 
       $start = $this->current_page * $this->items_per_page;
       $images = Array();
@@ -94,18 +100,16 @@ class Picturo {
           $temp_array['thumbnail'] = "/cache/" . $url . "/" . basename($image);
 
           // lazy link to the image
-          $temp_array['url'] =  $settings['base_url'] .'/'. urlencode($url) . "/" . urlencode(basename($image));
+          $encoded_url = str_replace('%2F', '/', urlencode($url));
+          $temp_array['url'] =  $settings['base_url'] .'/'. $encoded_url . "/" . urlencode(basename($image));
           // strip the folder names and just leave the end piece without the extension
           $temp_array['name'] = basename($image);
 
           $images[$i] = $temp_array;
         }
 
-
       }
     } else {
-      //echo "DETAIL VIEW $resource";
-
       if(is_file($resource)) {
         //TODO Find next previous files
         $folders = array();
@@ -165,12 +169,15 @@ class Picturo {
       'theme_dir' => THEMES_DIR . $settings['theme'],
       'theme_url' => $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'],
       'site_title' => $settings['site_title'],
+      'url' => "/" . $url,
       'breadcrumb' => $breadcrumb,
       'folders' => $folders,
       'images' => $images,
       'image_url' => $image_url,
       'image_previous_url' => $image_previous_url,
-      'image_next_url' => $image_next_url
+      'image_next_url' => $image_next_url,
+      'page_count' => $this->page_count,
+      'current_page' => $this->current_page
     );
     $this->run_hooks('before_render', array(&$twig_vars, &$twig));
     $output = $twig->render('index.html', $twig_vars);

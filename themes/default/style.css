@@ -174,10 +174,8 @@ a:hover, a:active {
     *zoom: 1;
 }
 
-.inner .image, .inner .folder {
-  float:left;
-}
 .inner .folder {
+  float:left;
   background: #FFF;
   margin: 0 0.5em 4em 0.5em;
   border-bottom: 1px solid #CCC;
@@ -209,6 +207,9 @@ img {
 .inner .images {
   clear:both;
 }
+.inner .image {
+  display:inline-block;
+}
 .inner .image img {
   border: 1px solid #EEE;
   border-bottom: 1px solid #CCC;
@@ -220,7 +221,7 @@ img {
   max-width: 900px;
 }
 .breadcrumb {
-  background: #DADADA;
+  background: #FFF;
   color: #666;
   margin-bottom: 3em;
   height: 3em;
@@ -238,6 +239,37 @@ img {
 .breadcrumb li:not(:first-child):before {
   content : ' ❯ ';
   margin: 0 0.5em;
+}
+.pagination {
+  clear:both;
+  background: #FFF;
+  text-align: center;
+  list-style-type: none;
+  margin-top: 3em;
+  line-height: 3em;
+  border-bottom: 1px solid #CCC;
+}
+.pagination li {
+  display:inline-block;
+  width: 3em;
+}
+.pagination .current {
+  background:#DADADA;
+  position:relative;
+}
+.pagination .current:before {
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0 .5em 10px .5em;
+  border-color: transparent transparent #DADADA transparent;
+  content:'';  
+  position: absolute;
+  top:-10px;
+  left:1em;
+}
+.pagination a {
+  display:block;
 }
 .image-wrapper {
   position:relative;
