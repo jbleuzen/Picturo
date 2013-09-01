@@ -206,9 +206,11 @@ img {
 }
 .inner .images {
   clear:both;
+  font-size: 0; /* Because of display:inline-block */
 }
 .inner .image {
   display:inline-block;
+  margin: 0px 7px 7px 7px; /* 1em / 2 = 7px */
 }
 .inner .image img {
   border: 1px solid #EEE;
@@ -270,6 +272,7 @@ img {
 }
 .pagination a {
   display:block;
+  font-weight: bold;
 }
 .image-wrapper {
   position:relative;

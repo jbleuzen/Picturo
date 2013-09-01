@@ -268,7 +268,7 @@ class Picturo {
     }
   }
 
-  private function make_thumb($src, $dest, $thumb_w = 174, $thumb_h = 174) {
+  private function make_thumb($src, $dest, $thumb_w = 164, $thumb_h = 164) {
     $srcimg = imagecreatefromjpeg($src);
     $src_w = imagesx($srcimg);
     $src_h = imagesy($srcimg);
