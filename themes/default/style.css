@@ -61,7 +61,7 @@ label, input[type=button], input[type=submit], button {
    cursor: pointer;
 }
 
-/* make buttons play nice in IE:	 
+/* make buttons play nice in IE:
 www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
 button {
    width: auto;
@@ -134,9 +134,9 @@ a:hover, a:active {
 #header a { color: #afe1da; }
 #header h1 a,
 #header a:hover { color: #fff; }
-#header h1 { 
+#header h1 {
    font-weight: bold;
-   margin: 0; 
+   margin: 0;
    float: left;
 }
 #header .nav {
@@ -265,7 +265,7 @@ img {
    border-style: solid;
    border-width: 0 .5em 10px .5em;
    border-color: transparent transparent #DADADA transparent;
-   content:'';  
+   content:'';
    position: absolute;
    top:-10px;
    left:1em;
@@ -276,7 +276,7 @@ img {
 }
 .image-wrapper {
    position:relative;
-} 
+}
 .image-wrapper img {
    border-bottom: 1px solid #CCC;
 }

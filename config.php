@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
 // Override any of the default settings below:

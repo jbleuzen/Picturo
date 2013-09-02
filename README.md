@@ -12,3 +12,4 @@ TODO :
  * Responsive theme
  * Some refactoring
  * Write documentations
+ * Remove plugins implementation
