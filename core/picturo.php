@@ -21,7 +21,6 @@ class Picturo {
 
       // Check cache folder configuration
       if(file_exists(CACHE_DIR) && is_writable(CACHE_DIR)) {
-         echo "CACHE OK";
          if( ! file_exists(CACHE_DIR . "/folders"))
             mkdir(CACHE_DIR . "/folders", 0777);
       } else {
