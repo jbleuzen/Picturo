@@ -10,8 +10,6 @@
  */
 class Picturo {
 
-   private $plugins;
-
    /**
     * The constructor carries out all the processing in Picturo.
     * Does URL routing, Markdown processing and Twig processing.
@@ -20,7 +18,6 @@ class Picturo {
 
       // Load the settings
       $settings = $this->get_config();
-      $this->run_hooks('config_loaded', array(&$settings));
 
       // Check cache folder configuration
       if(file_exists(CACHE_DIR) && is_writable(CACHE_DIR)) {
@@ -31,11 +28,6 @@ class Picturo {
          echo "<h1>Error</h1><p>Cache folder does not exist or is not writable</p>";
          die;
       }
-
-
-      // Load plugins
-      //$this->load_plugins();
-      //$this->run_hooks('plugins_loaded');
 
       // Get request url and script url
       $url = '';
@@ -54,7 +46,6 @@ class Picturo {
          $this->current_page = $page[1] - 1;
          $url = str_replace($page[0], "", $url);
       }
-      $this->run_hooks('request_url', array(&$url));
 
       // Get the file path
       $resource = CONTENT_DIR . $url;
@@ -141,16 +132,12 @@ class Picturo {
          }
       }
 
-      $this->run_hooks('before_load_content', array(&$file));
       if(file_exists($file)){
          $content = file_get_contents($file);
       } else {
-         $this->run_hooks('before_404_load_content', array(&$file));
          $content = file_get_contents(CONTENT_DIR .'404'. CONTENT_EXT);
          header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-         $this->run_hooks('after_404_load_content', array(&$file, &$content));
       }
-      $this->run_hooks('after_load_content', array(&$file, &$content));
 
       // Generate breadcrumb
       if($url != "") {
@@ -167,7 +154,6 @@ class Picturo {
       }
 
       // Load the theme
-      $this->run_hooks('before_twig_register');
       Twig_Autoloader::register();
       $loader = new Twig_Loader_Filesystem(THEMES_DIR . $settings['theme']);
       $twig = new Twig_Environment($loader, $settings['twig_config']);
@@ -189,9 +175,7 @@ class Picturo {
          'page_count' => $this->page_count,
          'current_page' => $this->current_page
       );
-      $this->run_hooks('before_render', array(&$twig_vars, &$twig));
       $output = $twig->render('index.html', $twig_vars);
-      $this->run_hooks('after_render', array(&$output));
       echo $output;
    }
 
@@ -260,22 +244,6 @@ class Picturo {
       }
 
       return $config;
-   }
-
-   /**
-    * Processes any hooks and runs them
-    *
-    * @param string $hook_id the ID of the hook
-    * @param array $args optional arguments
-    */
-   private function run_hooks($hook_id, $args = array()) {
-      if(!empty($this->plugins)){
-         foreach($this->plugins as $plugin){
-            if(is_callable(array($plugin, $hook_id))){
-               call_user_func_array(array($plugin, $hook_id), $args);
-            }
-         }
-      }
    }
 
    private function make_thumb($src, $dest, $thumb_w = 164, $thumb_h = 164) {
