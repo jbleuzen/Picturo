@@ -27,7 +27,7 @@ class Picturo {
             mkdir(CACHE_DIR . "/folders", 0777);
       } else {
          echo "<h1>Error</h1><p>Cache folder does not exist or is not writable</p>";
-die;
+         exit;
       }
 
       // Get request url and script url
