@@ -64,11 +64,12 @@ class Picturo {
                   $_SESSION['authed'] = true;
                   $_SESSION['username'] = $postUsername;
                   $this->redirect('/');
-               } else {
-                  $twig_vars['login_error'] = 'Invalid login';
-                  $twig_vars['username'] = $postUsername;
                }
-               $this->render_view($settings, 'login', $twig_vars);
+               $view_vars['login_error'] = 'Invalid login';
+               $view_vars['username'] = $postUsername;
+
+
+               $this->render_view($settings, 'login', $view_vars);
                exit;
             }
          } else {
@@ -209,7 +210,9 @@ class Picturo {
       $twig_vars['theme_url'] = $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'];
       $twig_vars['site_title'] = $settings['site_title'];
       $twig_vars['authed'] = $_SESSION['authed'];
-      $twig_vars['username'] = $_SESSION['username'];
+      if($_SESSION['authed']) {
+         $twig_vars['username'] = $_SESSION['username'];
+      }
       $output = $twig->render($name . '.html', $twig_vars);
       echo $output;
       exit;
