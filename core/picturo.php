@@ -196,24 +196,6 @@ class Picturo {
    }
 
    /**
-    * Load any plugins
-    */
-   private function load_plugins() {
-      $this->plugins = array();
-      $plugins = $this->get_files(PLUGINS_DIR, '.php');
-      if(!empty($plugins)){
-         foreach($plugins as $plugin){
-            include_once($plugin);
-            $plugin_name = preg_replace("/\\.[^.\\s]{3}$/", '', basename($plugin));
-            if(class_exists($plugin_name)){
-               $obj = new $plugin_name;
-               $this->plugins[] = $obj;
-            }
-         }
-      }
-   }
-
-   /**
     * Loads the config
     *
     * @return array $config an array of config values
