@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="276px" height="361px" viewBox="0 0 276 361" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Slice 1</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page 1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M27.334,110.667 C27.334,49.646 76.979,2.84217094e-14 138,2.84217094e-14 C199.022,2.84217094e-14 248.667,49.646 248.667,110.667 L248.667,173.333 L208.667,173.333 L208.667,110.667 C208.667,77.216 171.452,40 138,40 C104.549,40 67.334,77.216 67.334,110.667 L66.334,173.333 L27.334,173.333 L27.334,110.667 Z M238,210.333 L238,323 L38,323 L38,210.333 L238,210.333 L238,210.333 Z M0,172.6665 L0,360.6665 L276,360.6665 L276,172.6665 L0,172.6665 Z M0,172.6665" id="lock-2-icon" fill="#777777"></path>
+    </g>
+</svg>

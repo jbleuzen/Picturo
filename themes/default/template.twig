@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8" />
+      <link rel="icon" href="{{ theme_url }}/favicon.ico"/>
+      <link rel="stylesheet" href="{{ theme_url }}/css/normalize.css" />
+      <link rel="stylesheet" href="{{ theme_url }}/css/style.css" />
+      <title>{% block title %}{% endblock %} - {{ site_title }}</title>
+   </head>
+   <body class="{% block bodyClass %}{% endblock %}">
+      {% if authed == true %}
+      <header class="header clearfix">
+         <div class="inner">
+            <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
+            <ul class="nav">
+               <li>Hey {{ username }} !</li>
+               <li><a href="/logout">Logout</a></li>
+            </ul>
+         </div>
+      </header>
+      {% endif %}
+
+      <div class="content inner">
+         {% block content %}{% endblock %}
+      </div>
+
+      {% if authed == true %}
+      <footer class="footer">
+         <div class="inner">
+            <a href="https://github.com/jbleuzen/Picturo">Picturo</a> was made by <a href="http://www.johanbleuzen.fr">Johan BLEUZEN</a> and inspired by <a href="https://github.com/gilbitron/Pico">Pico</a>.
+         </div>
+      </footer>
+      {% endif %}
+
+   </body>
+</html>
+

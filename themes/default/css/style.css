@@ -3,97 +3,6 @@
 /* By: Gilbert Pellegrom
 /* http: //dev7studios.com
 /*=================================*/
-
-/* Reset Styles
-/*---------------------------------------------*/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
-   margin: 0;
-   padding: 0;
-   border: 0;
-   outline: 0;
-   font-weight: inherit;
-   font-style: inherit;
-   font-size: 100%;
-   font-family: inherit;
-   vertical-align: baseline;
-}
-
-body {
-   line-height: 1;
-   color: black;
-   background: white;
-}
-
-table {
-   border-collapse: separate;
-   border-spacing: 0;
-}
-
-caption, th, td {
-   text-align: left;
-   font-weight: normal;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-   content: "";
-}
-
-blockquote, q {
-   quotes: "" "";
-}
-
-/* HTML5 tags */
-header, section, footer,
-aside, nav, article, figure {
-   display: block;
-}
-
-/* hand cursor on clickable input elements */
-label, input[type=button], input[type=submit], button {
-   cursor: pointer;
-}
-
-/* make buttons play nice in IE:
-www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
-button {
-   width: auto;
-   overflow: visible;
-}
-
-/* Sharper Thumbnails */
-img {
-   -ms-interpolation-mode: bicubic;
-}
-
-/* Input Styles
-/*---------------------------------------------*/
-input,
-textarea,
-select {
-   padding: 5px;
-   font: 400 1em Verdana, Sans-serif;
-   color: #666;
-   background: #fff;
-   border: 1px solid #999999;
-   margin: 0 0 1em 0;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-   color: #000;
-   background: #fff;
-   border: 1px solid #666666;
-}
-
 /* Main Styles
 /*---------------------------------------------*/
 body {
@@ -125,41 +34,41 @@ a:hover, a:active {
    margin: 0 auto;
 }
 
-#header {
+.header {
    background: #2EAE9B;
    padding: 1.5em 0;
    margin-bottom: 3em;
    color: #afe1da;
 }
-#header a { color: #afe1da; }
-#header h1 a,
-#header a:hover { color: #fff; }
-#header h1 {
+.header a { color: #afe1da; }
+.header h1 a,
+.header a:hover { color: #fff; }
+.header h1 {
    font-weight: bold;
    margin: 0;
    font-size:2em;
    float: left;
 }
-#header .nav {
+.header .nav {
    float: right;
    list-style: none;
    margin: 0;
    padding: 0;
 }
-#header .nav li { display: inline; }
-#header .nav a {
+.header .nav li { display: inline; }
+.header .nav a {
    font-weight: bold;
    margin-left: 20px;
 }
 
-#footer {
+.footer {
    background: #707070;
    padding: 1.5em 0;
    margin-top: 3em;
    color: #C0C0C0;
 }
-#footer a { color: #ddd; }
-#footer a:hover { color: #fff; }
+.footer a { color: #ddd; }
+.footer a:hover { color: #fff; }
 
 /* Misc Styles
 /*---------------------------------------------*/
@@ -175,18 +84,91 @@ a:hover, a:active {
    *zoom: 1;
 }
 
-.inner .folder {
+/* Login
+/*---------------------------------------------*/
+.login {
+   margin-top: 8em;
+   text-align: center;
+}
+.login .content {
+   background: url(/themes/default/img/camera.svg) no-repeat center 0px;
+   padding-top: 12em;
+   background-size: 100px 73px;
+}
+.login form {
+   background-color: #FFF;
+   max-width: 400px;
+   margin: 0 auto;
+   min-width: 320px;
+   padding: 2em 0 0 0;
+   border-bottom: 1px solid #CCC;
+   position:relative;
+}
+.login form:before {
+   width: 0px;
+   height: 0px;
+   border-style: solid;
+   border-width: 0 1.5em 2em 1.5em;
+   border-color: transparent transparent #FFF transparent;
+   content: '';
+   position: absolute;
+   top: -2em;
+   left: 186px;
+}
+.error {
+   font-size: 18px;
+   color: #E74C3C;
+   padding: 10px;
+   margin: 0 0 1em;
+   font-weight: bold;
+   /* color: #FFF; */
+   border-radius: 30px;
+}
+.login input {
+   padding: 10px 40px 10px 10px;
+   font: 400 1em Verdana, Sans-serif;
+   color: #333;
+   border: none;
+   margin: 0 6px 1em 0;
+   width: 212px;
+   outline: none;
+   border: 1px solid lightgrey;
+   border-radius: 5px;
+}
+.login input[type="text"] {
+   background: url(/themes/default/img/user.svg) no-repeat 8px 7px;
+   background-size: 22px;
+   padding-left: 3em;
+}
+.login input[type="password"] {
+   background: url(/themes/default/img/padlock.svg) no-repeat 8px 8px;
+   background-size: 16px;
+   padding-left: 3em;
+}
+.login input[type="submit"] {
+   width: 200px;
+   background-color: #99429B;
+   color: #FFF;
+   border: none;
+   padding: 10px;
+   margin-bottom: 2em;       
+}
+
+
+/* Gallery
+/*---------------------------------------------*/
+.gallery .folder {
    float:left;
    background: #FFF;
    margin: 0 0.5em 4em 0.5em;
    border-bottom: 1px solid #CCC;
    max-width: 284px;
 }
-.inner .folder a {
+.gallery .folder a {
    display: block;
    padding-bottom: 1em;
 }
-.inner .folder p {
+.gallery .folder p {
    text-align:center;
    margin:0;
 }
@@ -197,32 +179,38 @@ img {
    -o-transition: opacity 0.3s ease-in-out;
    transition: opacity 0.3s ease-in-out;
 }
-.inner .folder img {
+.gallery .folder img {
    border: 1px solid #ecf0f1;
    border-top: 1px solid #FFF;
    border-bottom: none;
 }
-.inner .folder:hover img{
+.gallery .folder:hover img{
    opacity: 0.7;
 }
-.inner .images {
+.gallery .images {
    clear:both;
    font-size: 0; /* Because of display:inline-block */
 }
-.inner .image {
+.gallery .image {
    display:inline-block;
    margin: 0px 7px 7px 7px; /* 1em / 2 = 7px */
 }
-.inner .image img {
+.gallery .image img {
    border: 1px solid #EEE;
    border-bottom: 1px solid #CCC;
 }
-.inner .image:hover img {
+.gallery .image:hover img {
    opacity: 0.7;
 }
-.inner .detail {
+
+/* Gallery
+/*---------------------------------------------*/
+.detail {
    max-width: 900px;
 }
+
+/* Gallery
+/*---------------------------------------------*/
 .breadcrumb {
    background: #FFF;
    color: #666;
@@ -243,6 +231,9 @@ img {
    content : ' ❯ ';
    margin: 0 0.5em;
 }
+
+/* Gallery
+/*---------------------------------------------*/
 .pagination {
    clear:both;
    background: #FFF;
