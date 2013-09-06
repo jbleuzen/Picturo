@@ -84,7 +84,7 @@ class Picturo {
       }
 
       // Get the file path
-      $resource = CONTENT_DIR . $url;
+      $resource =  CONTENT_DIR . $url;
 
       // Create cache folder
       if(! is_dir(CACHE_DIR . $url) && is_dir($resource)) {
@@ -159,6 +159,15 @@ class Picturo {
             }
 
          }
+         $twig_vars = array(
+            'url' => "/" . $url,
+            'breadcrumb' => $breadcrumb,
+            'folders' => $folders,
+            'images' => $images,
+            'page_count' => $this->page_count,
+            'current_page' => $this->current_page
+         );
+         $this->render_view($settings, 'gallery', $twig_vars);
       } else {
          if(is_file($resource)) {
             $folders = array();
@@ -181,30 +190,12 @@ class Picturo {
                "image_next_url" => "/" . str_replace(CONTENT_DIR, "", $next)
             );
             $this->render_view($settings, 'detail',$view_vars);
-            exit;
          }
       }
 
-      if(file_exists($file)){
-         $content = file_get_contents($file);
-      } else {
-         $content = file_get_contents(CONTENT_DIR .'404'. CONTENT_EXT);
-         header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-      }
+      header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+      echo "<h1>Not found</h1>";
 
-      $twig_vars = array(
-         'url' => "/" . $url,
-         'breadcrumb' => $breadcrumb,
-         'folders' => $folders,
-         'images' => $images,
-         'image_url' => $image_url,
-         'image_previous_url' => $image_previous_url,
-         'image_next_url' => $image_next_url,
-         'page_count' => $this->page_count,
-         'current_page' => $this->current_page
-      );
-      $this->render_view($settings, 'gallery', $twig_vars);
-      exit;
    }
 
 
@@ -221,6 +212,7 @@ class Picturo {
       $twig_vars['username'] = $_SESSION['username'];
       $output = $twig->render($name . '.html', $twig_vars);
       echo $output;
+      exit;
    }
 
    private function redirect($url) {
