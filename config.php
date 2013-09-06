@@ -20,14 +20,16 @@ $config['excerpt_length'] = 50;			// The pages excerpt length (in words)
 
 $config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_setting }} in a theme
 
+$config['items_per_page'] = 15;
+
 */
+
 
 
 // TODO add
 // size of thumbnails
 // images extensions
 // images sort
-// items_per_page
 // cache_path (http://test.dev/thumbnails/path/image_XxX.jpg)
 
 ?>

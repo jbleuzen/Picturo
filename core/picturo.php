@@ -83,13 +83,11 @@ class Picturo {
             $folder = $tmp_array;
          }
 
-         $this->items_per_page = 15;
+         $this->page_count = ceil(count($imagesArray) / $settings['items_per_page']);
 
-         $this->page_count = ceil(count($imagesArray) / $this->items_per_page);
-
-         $start = $this->current_page * $this->items_per_page;
+         $start = $this->current_page * $settings['items_per_page'];
          $images = Array();
-         for($i = 0; $i < $this->items_per_page; $i++) {
+         for($i = 0; $i < $settings['items_per_page']; $i++) {
             $image = $imagesArray[$i + $start];
             if(isset($image) && ! empty($image)) {
                $temp_array = array();
@@ -233,7 +231,8 @@ class Picturo {
          'date_format' => 'jS M Y',
          'twig_config' => array('cache' => false, 'autoescape' => false, 'debug' => false),
          'pages_order_by' => 'alpha',
-         'pages_order' => 'asc'
+         'pages_order' => 'asc',
+         'items_per_page' => 15
       );
 
       if(is_array($config)) {
