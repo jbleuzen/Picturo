@@ -1,0 +1,12 @@
+    <form method="post" action="">
+    {% if login_error %}
+      <p class="error">{{ login_error }}</p>
+    {% endif %}
+    <p>
+      <input type="text" name="username" id="username" required placeholder="Username" value="{{ username }}" autocomplete="off"/>
+    </p>
+    <p>
+      <input type="password" name="password" id="password" required placeholder="Password"/>
+    </p>
+    <input class="alignright" type="submit" value="Login" />
+  </form>

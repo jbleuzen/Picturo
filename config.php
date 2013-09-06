@@ -24,6 +24,9 @@ $config['items_per_page'] = 15;
 
 */
 
+$config['private'] = true;
+$config['private_pass']['admin'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';
+
 
 
 // TODO add
