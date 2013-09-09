@@ -6,7 +6,7 @@
 /* Main Styles
 /*---------------------------------------------*/
 body {
-   font: 14px/1.8em Arial, Helvetica, sans-serif;
+   font: 14px/1.8em Verdana, sans-serif;
    color: #444;
    background: #EFEFEF;
    -webkit-font-smoothing: antialiased;
@@ -39,6 +39,7 @@ a:hover, a:active {
    padding: 1.5em 0;
    margin-bottom: 3em;
    color: #afe1da;
+   font-family: Helvetica, arial, sans-serif;
 }
 .header a { color: #afe1da; }
 .header h1 a,
@@ -147,7 +148,7 @@ a:hover, a:active {
 }
 .login input[type="submit"] {
    width: 200px;
-   background-color: #99429B;
+   background-color: #2EAE9B;
    color: #FFF;
    border: none;
    padding: 10px;
