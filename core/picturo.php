@@ -95,15 +95,21 @@ class Picturo {
     // Generate breadcrumb
     if($url != "") {
       $breadcrumb = array('Home' => '/');
-      $key = "";
       $crumbs = explode("/",$_SERVER["REQUEST_URI"]);
       array_shift($crumbs);
-      foreach($crumbs as $crumb){
+      foreach($crumbs as $index => $crumb){
         $key = urldecode(ucfirst(str_replace(array(".php","_"),array(""," "),$crumb)));
-        $breadcrumb[$key] = substr($_SERVER["REQUEST_URI"], 0,  strpos($_SERVER["REQUEST_URI"], $crumb) + strlen($crumb));
+        if(preg_match("/\.[a-z]+$/i", $key)) {
+          $key = substr($key, 0, -4);
+        }
+        
+        // Remove last url of breadcrumb items
+        if($index == count($crumbs) - 1) {
+          $breadcrumb[$key] = "";
+        } else {
+          $breadcrumb[$key] = substr($_SERVER["REQUEST_URI"], 0,  strpos($_SERVER["REQUEST_URI"], $crumb) + strlen($crumb));
+        }
       }
-      // Remove last url of breadcrumb items
-      $breadcrumb[$key] = "";
     }
 
     if(is_dir($resource)) {
