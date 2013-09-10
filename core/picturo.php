@@ -132,9 +132,9 @@ class Picturo {
 
         // TODO : Find a better way to handle this
         if($url == "") {
-          $tmp_array['url'] =   $settings['base_url'] .'/' . strtolower(urlencode($tmp_array['name']));
+          $tmp_array['url'] =   $settings['base_url'] .'/' . urlencode($tmp_array['name']);
         } else {
-          $tmp_array['url'] =   $settings['base_url'] .'/' . $url . "/" . strtolower(urlencode($tmp_array['name']));
+          $tmp_array['url'] =   $settings['base_url'] .'/' . $url . "/" . urlencode($tmp_array['name']);
         }
         $folder = $tmp_array;
       }
