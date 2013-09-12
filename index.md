@@ -3,7 +3,7 @@ layout: default
 ---
 
 Picturo is a simple flat file photo gallery running. No admin, you just need to drop your pictures in the `content` to publish your pictures.
-Picturo is heavily inspired by [Pico](), but it's for photos.
+Picturo is heavily inspired by [Pico](http://pico.dev7studios.com/), but it's for photos.
 
 ## Requirements
 
