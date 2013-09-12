@@ -115,7 +115,7 @@ class Picturo {
     if(is_dir($resource)) {
       $folders = array();
       $imagesArray = array();
-      $this->get_files($resource, &$folders, &$imagesArray);
+      $this->get_files($resource, $folders, $imagesArray);
 
       foreach($folders as &$folder) {
         $tmp_array = array();
@@ -178,7 +178,7 @@ class Picturo {
         $folders = array();
         $imagesArray = array();
 
-        $this->get_files(dirname($resource)."/", &$folders, &$imagesArray);
+        $this->get_files(dirname($resource)."/", $folders, $imagesArray);
         $previous = "";
         $next = "";
         for($i = 0; $i < count($imagesArray); $i++) {
