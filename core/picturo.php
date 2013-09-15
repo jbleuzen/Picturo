@@ -24,7 +24,7 @@ class Picturo {
     // Check cache folder configuration
     if(file_exists(CACHE_DIR) && is_writable(CACHE_DIR)) {
       if( ! file_exists(CACHE_DIR . "/folders"))
-        mkdir(CACHE_DIR . "/folders", 0777);
+        mkdir(CACHE_DIR . "/folders", 0750);
     } else {
       echo "<h1>Error</h1><p>Cache folder does not exist or is not writable</p>";
       exit;
