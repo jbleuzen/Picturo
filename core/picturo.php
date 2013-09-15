@@ -60,10 +60,12 @@ class Picturo {
         $postUsername = $_POST['username'];
         $postPassword = $_POST['password'];
         if(isset($postUsername) && isset($postPassword)) {
-          if(isset($settings['private_pass'][$postUsername]) == true && $settings['private_pass'][$postUsername] == sha1($postPassword)) {
-            $_SESSION['authed'] = true;
-            $_SESSION['username'] = $postUsername;
-            $this->redirect('/');
+            if(isset($settings['private_pass'][$postUsername]) == true){
+               if(crypt($postPassword, $settings['private_pass'][$postUsername]) == crypt($postPassword)) {
+                    $_SESSION['authed'] = true;
+                    $_SESSION['username'] = $postUsername;
+                    $this->redirect('/');
+               }
           }
           $view_vars['login_error'] = 'Invalid login';
           $view_vars['username'] = $postUsername;
