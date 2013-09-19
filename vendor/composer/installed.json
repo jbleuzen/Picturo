@@ -6,12 +6,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/bramus/router.git",
-            "reference": "99833624cdadd232187d593d7e439a5f2d17d211"
+            "reference": "b8772a7d1472d51c70c66ba95c20ea632a68ab8e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bramus/router/zipball/99833624cdadd232187d593d7e439a5f2d17d211",
-            "reference": "99833624cdadd232187d593d7e439a5f2d17d211",
+            "url": "https://api.github.com/repos/bramus/router/zipball/b8772a7d1472d51c70c66ba95c20ea632a68ab8e",
+            "reference": "b8772a7d1472d51c70c66ba95c20ea632a68ab8e",
             "shasum": ""
         },
         "require": {
@@ -21,7 +21,7 @@
             "phpunit/php-code-coverage": "1.3.*@dev",
             "phpunit/phpunit": "3.7.x"
         },
-        "time": "2013-09-17 12:58:46",
+        "time": "2013-09-19 13:47:24",
         "type": "library",
         "installation-source": "source",
         "autoload": {
