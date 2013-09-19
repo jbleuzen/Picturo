@@ -1,4 +1,9 @@
 *** Picturo Changelog ***
 
+2013.09.19 - version 0.1.0
+ * Using a new router
+ * Cleaning some urls
+ * Fixing bugs
+
 2013.09.01 - version 0.0.1
  * Initial release
