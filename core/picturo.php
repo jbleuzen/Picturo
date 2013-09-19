@@ -10,6 +10,12 @@
  */
 class Picturo {
 
+  private $settings;
+
+  private $current_page = 0;
+
+  private $breadcrumb = array();
+
   /**
    * The constructor carries out all the processing in Picturo.
    * Does URL routing, Markdown processing and Twig processing.
@@ -19,7 +25,7 @@ class Picturo {
     session_start();
 
     // Load the settings
-    $settings = $this->get_config();
+    $this->settings = $this->get_config();
 
     // Check cache folder configuration
     if(file_exists(CACHE_DIR) && is_writable(CACHE_DIR)) {
@@ -27,62 +33,51 @@ class Picturo {
         mkdir(CACHE_DIR . "/folders", 0777);
     } else {
       echo "<h1>Error</h1><p>Cache folder does not exist or is not writable</p>";
-      exit;
+    }
+  }
+
+  public function login() {
+    if($this->settings['private'] == true) {
+      // If already logged in will be redirectec to '/'
+      if( ! isset($_SESSION['username']) || $_SESSION['username'] == "") {
+        $this->render_view('login', array());
+      }
+    }
+    $this->redirect ('/');
+  }
+
+  public function logout() {
+    if(isset($_SESSION['username'])) {
+      session_destroy();
+      $this->redirect('/login');
+    } else {
+      $this->redirect('/');
+    }
+  }
+
+  public function authenticate() {
+    $postUsername = $_POST['username'];
+    $postPassword = $_POST['password'];
+    if(isset($postUsername) && isset($postPassword)) {
+      if(isset($this->settings['private_pass'][$postUsername]) == true && $this->settings['private_pass'][$postUsername] == sha1($postPassword)) {
+        $_SESSION['username'] = $postUsername;
+        $this->redirect('/');
+      }
+      $view_vars['login_error'] = 'Invalid login';
+      $view_vars['username'] = $postUsername;
+
+      $this->render_view('login', $view_vars);
+    }
+  }
+
+  public function browse($path, $page) { 
+    if (!isset($_SESSION['username'])) {
+      $this->redirect('/');
     }
 
     // Get request url and script url
-    $url = '';
-    $request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
-    $script_url  = (isset($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : '';
-
-
-    // Get our url path and trim the / of the left and the right
-    if($request_url != $script_url) {
-      $url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
-    }
-    $url = preg_replace('/\?.*/', '', $url); // Strip query string
-    $url = urldecode($url);
-
-    if($settings['private'] && $url != 'login' && (!isset($_SESSION['authed']) || $_SESSION['authed'] == false)) {
-      $this->redirect('/login');
-    }
-    if($settings['private'] && isset($_SESSION['authed']) && $_SESSION['authed'] == true && $request_url == "/logout") {
-      session_destroy();
-      $this->redirect('/login');
-    }
-    if($settings['private'] && $request_url == "/login") {
-      if( ! isset($_SESSION['authed']) || $_SESSION['authed'] == false) {
-        if($_SERVER['REQUEST_METHOD'] == "GET") {
-          $this->render_view($settings, 'login', array());
-          exit;
-        }
-
-        $postUsername = $_POST['username'];
-        $postPassword = $_POST['password'];
-        if(isset($postUsername) && isset($postPassword)) {
-          if(isset($settings['private_pass'][$postUsername]) == true && $settings['private_pass'][$postUsername] == sha1($postPassword)) {
-            $_SESSION['authed'] = true;
-            $_SESSION['username'] = $postUsername;
-            $this->redirect('/');
-          }
-          $view_vars['login_error'] = 'Invalid login';
-          $view_vars['username'] = $postUsername;
-
-
-          $this->render_view($settings, 'login', $view_vars);
-          exit;
-        }
-      } else {
-        // Already authentified
-        $this->redirect('/');
-      }
-    }
-
-    // Match page[0-9]
-    if(preg_match("/\/page([0-9]+)$/", $url, $page)) {
-      $this->current_page = $page[1] - 1;
-      $url = str_replace($page[0], "", $url);
-    }
+    $this->current_page = $page - 1;
+    $url = urldecode($path);
 
     // Get the file path
     $resource =  CONTENT_DIR . $url;
@@ -94,7 +89,7 @@ class Picturo {
 
     // Generate breadcrumb
     if($url != "") {
-      $breadcrumb = array('Home' => '/');
+      $this->breadcrumb = array('Home' => '/');
       $crumbs = explode("/",$_SERVER["REQUEST_URI"]);
       array_shift($crumbs);
       foreach($crumbs as $index => $crumb){
@@ -102,12 +97,12 @@ class Picturo {
         if(preg_match("/\.[a-z]+$/i", $key)) {
           $key = substr($key, 0, -4);
         }
-        
+
         // Remove last url of breadcrumb items
         if($index == count($crumbs) - 1) {
-          $breadcrumb[$key] = "";
+          $this->breadcrumb[$key] = "";
         } else {
-          $breadcrumb[$key] = substr($_SERVER["REQUEST_URI"], 0,  strpos($_SERVER["REQUEST_URI"], $crumb) + strlen($crumb));
+          $this->breadcrumb[$key] = substr($_SERVER["REQUEST_URI"], 0,  strpos($_SERVER["REQUEST_URI"], $crumb) + strlen($crumb));
         }
       }
     }
@@ -123,42 +118,46 @@ class Picturo {
         $files = glob("$folder/*.{jpg,jpeg,JPG,JPEG}", GLOB_BRACE);
         $tmp_array['images_count'] = count($files);
 
-        $tmp_array['last_modified'] = date ("F d Y H:i:s.", filemtime($folder));
         // Generate thumbnail
         if( ! file_exists(CACHE_DIR. "folders/" . basename($files[0]))) {
           $this->make_thumb($files[0], CACHE_DIR. "folders/" . basename($files[0]), 294, 200);
         }
         $tmp_array['thumbnail'] = "/cache/folders/". basename($files[0]);
 
-        // TODO : Find a better way to handle this
-        if($url == "") {
-          $tmp_array['url'] =   $settings['base_url'] .'/' . urlencode($tmp_array['name']);
-        } else {
-          $tmp_array['url'] =   $settings['base_url'] .'/' . $url . "/" . urlencode($tmp_array['name']);
-        }
+        $temp_url = '/' . $url . "/" . urlencode($tmp_array['name']);
+        $tmp_array['url'] =   $this->settings['base_url'] . str_replace('//', '/', $temp_url);
         $folder = $tmp_array;
       }
 
-      $this->page_count = ceil(count($imagesArray) / $settings['items_per_page']);
+      $this->page_count = ceil(count($imagesArray) / $this->settings['items_per_page']);
 
-      $start = $this->current_page * $settings['items_per_page'];
+      $start = $this->current_page * $this->settings['items_per_page'];
       $images = Array();
-      for($i = 0; $i < $settings['items_per_page']; $i++) {
+
+      $imageCount = 0;
+      if($this->settings['items_per_page'] < count($imagesArray) - $start) {
+        $imageCount = $this->settings['items_per_page'];
+      } else {
+        $imageCount = count($imagesArray) - $start;
+      }
+      for($i = 0; $i < $imageCount; $i++) {
         $image = $imagesArray[$i + $start];
         if(isset($image) && ! empty($image)) {
           $temp_array = array();
+          $image_basename = basename($image);
 
           // Generate thumbnail
-          if( ! file_exists(CACHE_DIR. $url . "/" . basename($image))) {
-            $this->make_thumb($image, CACHE_DIR. $url . "/" . basename($image));
+          if( ! file_exists(CACHE_DIR. $url . "/" . $image_basename)) {
+            $this->make_thumb($image, CACHE_DIR. $url . "/" . $image_basename);
           }
-          $temp_array['thumbnail'] = "/cache/" . $url . "/" . basename($image);
+          $temp_array['thumbnail'] = "/cache/" . $url . "/" . $image_basename;
 
           // lazy link to the image
           $encoded_url = str_replace('%2F', '/', urlencode($url));
-          $temp_array['url'] =  $settings['base_url'] .'/'. $encoded_url . "/" . urlencode(basename($image));
+          $temp_url = '/'. $encoded_url . "/" . urlencode($image_basename);
+          $temp_array['url'] = $this->settings['base_url'] . str_replace('//', '/', $temp_url);
           // strip the folder names and just leave the end piece without the extension
-          $temp_array['name'] = basename($image);
+          $temp_array['name'] = $image_basename;
 
           $images[$i] = $temp_array;
         }
@@ -166,13 +165,13 @@ class Picturo {
       }
       $twig_vars = array(
         'url' => "/" . $url,
-        'breadcrumb' => $breadcrumb,
+        'breadcrumb' => $this->breadcrumb,
         'folders' => $folders,
         'images' => $images,
         'page_count' => $this->page_count,
         'current_page' => $this->current_page
       );
-      $this->render_view($settings, 'gallery', $twig_vars);
+      $this->render_view('gallery', $twig_vars);
     } else {
       if(is_file($resource)) {
         $folders = array();
@@ -183,18 +182,22 @@ class Picturo {
         $next = "";
         for($i = 0; $i < count($imagesArray); $i++) {
           if($imagesArray[$i] == $resource){
-            $previous = $imagesArray[$i-1];
-            $next = $imagesArray[$i+1];
+            if($i > 1) {
+              $previous = $imagesArray[$i-1];
+            }
+            if($i < count($imagesArray) - 1) {
+              $next = $imagesArray[$i+1];
+            }
             break;
           }
         }
         $view_vars = array(
-          "breadcrumb" => $breadcrumb,
+          "breadcrumb" => $this->breadcrumb,
           "image_url" => "/content/" . str_replace(CONTENT_DIR, "", $resource),
           "image_previous_url" =>  "/" . str_replace(CONTENT_DIR, "", $previous),
           "image_next_url" => "/" . str_replace(CONTENT_DIR, "", $next)
         );
-        $this->render_view($settings, 'detail',$view_vars);
+        $this->render_view('detail',$view_vars);
       }
     }
 
@@ -204,18 +207,19 @@ class Picturo {
   }
 
 
-  private function render_view($settings, $name, $twig_vars) {
+  private function render_view($name, $twig_vars) {
     // Load the theme
     Twig_Autoloader::register();
-    $loader = new Twig_Loader_Filesystem(THEMES_DIR . $settings['theme']);
-    $twig = new Twig_Environment($loader, $settings['twig_config']);
+    $loader = new Twig_Loader_Filesystem(THEMES_DIR . $this->settings['theme']);
+    $twig = new Twig_Environment($loader, $this->settings['twig_config']);
     $twig->addExtension(new Twig_Extension_Debug());
-    $twig_vars['base_url'] = $settings['base_url'];
-    $twig_vars['theme_url'] = $settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $settings['theme'];
-    $twig_vars['site_title'] = $settings['site_title'];
-    $twig_vars['authed'] = $_SESSION['authed'];
-    if($_SESSION['authed']) {
+    $twig_vars['base_url'] = $this->settings['base_url'];
+    $twig_vars['theme_url'] = $this->settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $this->settings['theme'];
+    $twig_vars['site_title'] = $this->settings['site_title'];
+    if(isset($_SESSION['username'])) {
       $twig_vars['username'] = $_SESSION['username'];
+    } else {
+      $twig_vars['username'] = "";
     }
     $output = $twig->render($name . '.html', $twig_vars);
     echo $output;
