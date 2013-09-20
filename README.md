@@ -3,7 +3,7 @@ Picturo
 
 Picturo is a stupidly simple, blazing fast, flat file photo gallery. 
 
-[Documentation](http://jbleuzen.github.io/Picturo/) — [Demo](http://picturo.johanbleuzen.fr)
+[Documentation](http://jbleuzen.github.io/Picturo/) — [Demo](http://picturo.johanbleuzen.fr) (user : admin - pass : admin)
 
 If you have trouble with Picturo, please use the [Issue page](https://github.com/jbleuzen/Picturo/issues).
 
