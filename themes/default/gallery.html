@@ -24,7 +24,7 @@
          {% for folder in folders%}
          <div class="folder">
             <a href="{{ folder.url }}">
-               <img src="{{ folder.thumbnail }}" width="284" height="200" />
+               {{ picturo_thumbnail(folder.thumbnail_url, 284, 200) }}
                <p>{{ folder.name }}</p>
             </a>
          </div>
@@ -35,7 +35,7 @@
          {% for image in images %}
          <div class="image">
             <a href="{{ image.url }}">
-               <img src="{{ image.thumbnail }}" alt="{{ image.name }}" width="164" height="164">
+              {{ picturo_thumbnail(image.thumbnail_url, 164, 164) }}
             </a>
          </div>
          {% endfor %}

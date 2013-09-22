@@ -27,13 +27,6 @@ class Picturo {
     // Load the settings
     $this->settings = $this->get_config();
 
-    // Check cache folder configuration
-    if(file_exists(CACHE_DIR) && is_writable(CACHE_DIR)) {
-      if( ! file_exists(CACHE_DIR . "/folders"))
-        mkdir(CACHE_DIR . "/folders", 0777);
-    } else {
-      echo "<h1>Error</h1><p>Cache folder does not exist or is not writable</p>";
-    }
   }
 
   public function login() {
@@ -82,11 +75,6 @@ class Picturo {
     // Get the file path
     $resource =  CONTENT_DIR . $url;
 
-    // Create cache folder
-    if(! is_dir(CACHE_DIR . $url) && is_dir($resource)) {
-      mkdir(CACHE_DIR . $url);
-    }
-
     // Generate breadcrumb
     if($url != "") {
       $this->breadcrumb = array('Home' => '/');
@@ -118,13 +106,8 @@ class Picturo {
         $files = glob("$folder/*.{jpg,jpeg,JPG,JPEG}", GLOB_BRACE);
         $tmp_array['images_count'] = count($files);
 
-        // Generate thumbnail
-        if( ! file_exists(CACHE_DIR. "folders/" . basename($files[0]))) {
-          $this->make_thumb($files[0], CACHE_DIR. "folders/" . basename($files[0]), 294, 200);
-        }
-        $tmp_array['thumbnail'] = "/cache/folders/". basename($files[0]);
-
         $temp_url = '/' . $url . "/" . urlencode($tmp_array['name']);
+        $tmp_array['thumbnail_url'] = $temp_url . "/" . basename($files[0]);
         $tmp_array['url'] =   $this->settings['base_url'] . str_replace('//', '/', $temp_url);
         $folder = $tmp_array;
       }
@@ -146,16 +129,11 @@ class Picturo {
           $temp_array = array();
           $image_basename = basename($image);
 
-          // Generate thumbnail
-          if( ! file_exists(CACHE_DIR. $url . "/" . $image_basename)) {
-            $this->make_thumb($image, CACHE_DIR. $url . "/" . $image_basename);
-          }
-          $temp_array['thumbnail'] = "/cache/" . $url . "/" . $image_basename;
-
           // lazy link to the image
           $encoded_url = str_replace('%2F', '/', urlencode($url));
           $temp_url = '/'. $encoded_url . "/" . urlencode($image_basename);
-          $temp_array['url'] = $this->settings['base_url'] . str_replace('//', '/', $temp_url);
+          $temp_array['thumbnail_url'] = str_replace('//', '/', $temp_url);
+          $temp_array['url'] = str_replace('//', '/', $temp_url);
           // strip the folder names and just leave the end piece without the extension
           $temp_array['name'] = $image_basename;
 
@@ -213,6 +191,12 @@ class Picturo {
     $loader = new Twig_Loader_Filesystem(THEMES_DIR . $this->settings['theme']);
     $twig = new Twig_Environment($loader, $this->settings['twig_config']);
     $twig->addExtension(new Twig_Extension_Debug());
+    $thumbnail_function = new Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height) {
+      $imgTag = "<img src='/thumbnail/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
+      // Remove multiple slash 
+      echo preg_replace("/\/(\/)+/si", "/", $imgTag);
+    });
+    $twig->addFunction($thumbnail_function);
     $twig_vars['base_url'] = $this->settings['base_url'];
     $twig_vars['theme_url'] = $this->settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $this->settings['theme'];
     $twig_vars['site_title'] = $this->settings['site_title'];
@@ -279,31 +263,6 @@ class Picturo {
 
     return $config;
   }
-
-  private function make_thumb($src, $dest, $thumb_w = 164, $thumb_h = 164) {
-    $srcimg = imagecreatefromjpeg($src);
-    $src_w = imagesx($srcimg);
-    $src_h = imagesy($srcimg);
-    $src_ratio = $src_w/$src_h;
-    if (1 > $src_ratio) {
-      $new_h = $thumb_w/$src_ratio;
-      $new_w = $thumb_w;
-    } else {
-      $new_w = $thumb_h*$src_ratio;
-      $new_h = $thumb_h;
-    }
-    $x_mid = $new_w/2;
-    $y_mid = $new_h/2;
-    $newpic = imagecreatetruecolor(round($new_w), round($new_h));
-    imagecopyresampled($newpic, $srcimg, 0, 0, 0, 0, $new_w, $new_h, $src_w, $src_h);
-    $final = imagecreatetruecolor($thumb_w, $thumb_h);
-    imagecopyresampled($final, $newpic, 0, 0, ($x_mid-($thumb_w/2)), ($y_mid-($thumb_h/2)), $thumb_w, $thumb_h, $thumb_w, $thumb_h);
-    imagedestroy($newpic);
-    imagedestroy($srcimg);
-
-    imagejpeg($final, $dest, 80); //again, assuming jpeg, 80% quality
-  }
-
 
   /**
    * Helper function to work out the base URL
