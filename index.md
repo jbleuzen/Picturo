@@ -5,6 +5,13 @@ layout: default
 Picturo is a simple flat file photo gallery running. No admin, you just need to drop your pictures in the `content` to publish your pictures.
 Picturo is heavily inspired by [Pico](http://pico.dev7studios.com/), but it's for photos.
 
+## Demo
+
+[You can try Picturo here](http://picturo.johanbleuzen.fr), actually the demo is private but you can login with the following credentials :
+
+* user : `admin` 
+* password : `admin`
+
 ## Requirements
 
 To run Picturo you will need **PHP 5.2.4+** and **GD Library** on your server. If you're running Apache you will also require `mod_rewrite` to be enabled.
@@ -18,7 +25,7 @@ To run Picturo you will need **PHP 5.2.4+** and **GD Library** on your server. I
 
 ## Privatize your site
 
-Picturo can keep your galleries private, you just have to edit `config.php` and set `private` variable to true and add a user. For exemple, you can create an "admin" user with "admin" as passwords :
+Picturo can keep your galleries private, you just have to edit `config.php` and set `private` variable to true and add a user. By default, there is an admin user with the password "admin" in the configuration file. Just uncomment the two following lines to enable private galleries :
 
 {% highlight php %}
 $config['private'] = true;
@@ -33,7 +40,7 @@ Your photos must be stored in `content` folder, if you want to add a gallery you
 
 Galleries thumbnail are generated with the first picture found in the folder.
 
-## Create your theme
+## Create your own theme
 
 Picturo supports themes with [Twig](http://twig.sensiolabs.org/) as templating engine they are located in the `themes` folder.
 
@@ -57,8 +64,8 @@ Variables for `gallery.html`, which will list all folders and pictures :
 
  * \{\{ url \}\} : The current url
  * \{\{ breadcrumb \}\} : An hash containing a splitted array of URL. Keys are URL and values are folders name
- * \{\{ folders \}\} : An array containing folder objects for current url. Each folder has 3 attributes (url, thumbnail, name)
- * \{\{ images \}\} : An array containing image objects for current url. Each image has 5 attributes (url, thumbnail, name, width, height)
+ * \{\{ folders \}\} : An array containing folder objects for current url. Each folder has 3 attributes (url, thumbnail_url, name)
+ * \{\{ images \}\} : An array containing image objects for current url. Each image has 3 attributes (url, thumbnail_url, name)
  * \{\{ page_count \}\} : The total count of pages for current url.
  * \{\{ current_page \}\} : The current page
 
@@ -74,7 +81,27 @@ Variables for `login.html`, which will display the login form :
  * \{\{ login_error \}\} : Tell if login attempt was valid or not
  * \{\{ username \}\} : The username entered in login form input
 
-I recommend to check the `default` theme and use [Twig template](http://twig.sensiolabs.org/doc/templates.html#template-inheritance) for easy theming.
+
+## Thumbnail generation
+
+For easy thumbnail generation in your theme, there is an helper function available in your views.  
+You should use the function `picturo_thumbnail` in your views. 
+
+For example, if you want to generate a squared 300px by 300px thumbnail, insert the following line in your view : 
+
+{% raw %}
+```
+{% picturo_thumbnail(thumbnail_url, 300, 300) %}
+```
+{% endraw %}
+
+Thumbnail will be be automagically created in a folder matching the size of the thumbnail !
+
+### Other themes
+
+I plan to release some others theme later, but if your want to create your own I recommend to check the `default` theme and use [Twig template](http://twig.sensiolabs.org/doc/templates.html#template-inheritance) for easy theming.
+
+And please, show me your theme if you want to share it.
 
 ## Contribute
 
