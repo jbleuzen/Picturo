@@ -9,12 +9,12 @@
    <div class="inner">
       {%if breadcrumb %}
       <ul class="breadcrumb">
-         {% for link,url in breadcrumb %}
+         {% for name,url in breadcrumb %}
          <li>
          {% if url %}
-         <a href="{{ url }}">{{ link }}</a></li>
+         <a href="{{ url }}">{{ name }}</a></li>
          {% else %}
-         {{ link }}
+         {{ name }}
          {% endif %}
          {% endfor %}
       </ul>
@@ -48,9 +48,9 @@
          <li class="current">{{ i }}</li>
          {% else %}
          {% if i == 1 %}
-         <li><a href="{{ url }}">{{ i }}</a></li>
+         <li><a href="{{base_url}}{{ url }}">{{ i }}</a></li>
          {% else %}
-         <li><a href="{{ url }}/page{{ i }}"> {{ i }}</a></li>
+         <li><a href="{{base_url}}{{ url }}/page{{ i }}"> {{ i }}</a></li>
          {% endif %}
          {% endif %}
          {% endfor %}

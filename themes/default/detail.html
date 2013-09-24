@@ -18,10 +18,10 @@
 </ul>
 {% endif %}
 <div class="image-wrapper">
-   {% if image_previous_url != '/' %}
+   {% if image_previous_url != base_url ~ "/" %}
    <a class="previous-image" href="{{ image_previous_url }}">❮</a>
    {% endif %}
-   {% if image_next_url != '/' %}
+   {% if image_next_url != base_url ~ "/" %}
    <a class="next-image" href="{{ image_next_url }}">❯</a>
    {% endif %}
    <img class="detail" src="{{ image_url }}" width="900"/>

@@ -27,7 +27,6 @@ $router->get('/logout', function() {
    $picturo->logout();
 });
 
-
 $router->get('/thumbnail/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
   $thumbnail = new PicturoThumbnail($width, $height, $path);
   $thumbnail->serve();

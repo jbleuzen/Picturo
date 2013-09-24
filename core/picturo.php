@@ -77,14 +77,12 @@ class Picturo {
 
     // Generate breadcrumb
     if($url != "") {
-      $this->breadcrumb = array('Home' => '/');
-      $crumbs = explode("/",$_SERVER["REQUEST_URI"]);
+      $this->breadcrumb = array('Home' => $this->settings['base_url']);
+      $cleaned_url = str_replace('//', '/', str_replace($this->settings['base_url'], "/", $_SERVER["REQUEST_URI"]));
+      $crumbs = explode("/", $cleaned_url);
       array_shift($crumbs);
       foreach($crumbs as $index => $crumb){
-        $key = urldecode(ucfirst(str_replace(array(".php","_"),array(""," "),$crumb)));
-        if(preg_match("/\.[a-z]+$/i", $key)) {
-          $key = substr($key, 0, -4);
-        }
+        $key = urldecode(ucfirst(str_replace(array(".jpg", ".jpg",  "-", "_"),array("","", " ", " "),$crumb)));
 
         // Remove last url of breadcrumb items
         if($index == count($crumbs) - 1) {
@@ -108,7 +106,7 @@ class Picturo {
 
         $temp_url = '/' . $url . "/" . urlencode($tmp_array['name']);
         $tmp_array['thumbnail_url'] = $temp_url . "/" . basename($files[0]);
-        $tmp_array['url'] =   $this->settings['base_url'] . str_replace('//', '/', $temp_url);
+        $tmp_array['url'] = $this->settings['base_url'] . preg_replace('/(\/)+\//', '/', $temp_url);
         $folder = $tmp_array;
       }
 
@@ -132,8 +130,9 @@ class Picturo {
           // lazy link to the image
           $encoded_url = str_replace('%2F', '/', urlencode($url));
           $temp_url = '/'. $encoded_url . "/" . urlencode($image_basename);
-          $temp_array['thumbnail_url'] = str_replace('//', '/', $temp_url);
-          $temp_array['url'] = str_replace('//', '/', $temp_url);
+          $parsed_base_url = parse_url($this->settings['base_url']);
+          $temp_array['thumbnail_url'] = preg_replace('/(\/)+\//', '/', $temp_url);
+          $temp_array['url'] = preg_replace('/([^:])(\/)+\//', '/', $parsed_base_url['path'] . $temp_url);
           // strip the folder names and just leave the end piece without the extension
           $temp_array['name'] = $image_basename;
 
@@ -160,7 +159,7 @@ class Picturo {
         $next = "";
         for($i = 0; $i < count($imagesArray); $i++) {
           if($imagesArray[$i] == $resource){
-            if($i > 1) {
+            if($i >= 1) {
               $previous = $imagesArray[$i-1];
             }
             if($i < count($imagesArray) - 1) {
@@ -171,9 +170,9 @@ class Picturo {
         }
         $view_vars = array(
           "breadcrumb" => $this->breadcrumb,
-          "image_url" => "/content/" . str_replace(CONTENT_DIR, "", $resource),
-          "image_previous_url" =>  "/" . str_replace(CONTENT_DIR, "", $previous),
-          "image_next_url" => "/" . str_replace(CONTENT_DIR, "", $next)
+          "image_url" => $this->settings['base_url'] . "/content/" . str_replace(CONTENT_DIR, "", $resource),
+          "image_previous_url" =>  $this->settings['base_url'] . "/" . str_replace(CONTENT_DIR, "", $previous),
+          "image_next_url" => $this->settings['base_url'] . "/" . str_replace(CONTENT_DIR, "", $next)
         );
         $this->render_view('detail',$view_vars);
       }
@@ -191,10 +190,10 @@ class Picturo {
     $loader = new Twig_Loader_Filesystem(THEMES_DIR . $this->settings['theme']);
     $twig = new Twig_Environment($loader, $this->settings['twig_config']);
     $twig->addExtension(new Twig_Extension_Debug());
-    $thumbnail_function = new Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height) {
-      $imgTag = "<img src='/thumbnail/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
-      // Remove multiple slash 
-      echo preg_replace("/\/(\/)+/si", "/", $imgTag);
+    $base_url = $this->settings['base_url'];
+    $thumbnail_function = new Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height)  use($base_url) {
+      $imgTag = "<img src='" . $base_url . "/thumbnail/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
+      echo $imgTag;
     });
     $twig->addFunction($thumbnail_function);
     $twig_vars['base_url'] = $this->settings['base_url'];
@@ -211,7 +210,7 @@ class Picturo {
   }
 
   private function redirect($url) {
-    header("Location: $url");
+    header("Location: ". $this->settings['base_url'] . "$url");
     exit;
   }
 
