@@ -14,22 +14,15 @@ $config['twig_config'] = array(			// Twig settings
 );
 $config['items_per_page'] = 15;
 
-// To add a custom config setting:
-
-$config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_setting }} in a theme
-
-
-*/
+// Un-comment to make your gallery private
 
 $config['private'] = true;
 $config['private_pass']['admin'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';
 
+// To add a custom config setting:
 
+$config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_setting }} in a theme
 
-// TODO add
-// size of thumbnails
-// images extensions
-// images sort
-// cache_path (http://test.dev/thumbnails/path/image_XxX.jpg)
+*/
 
 ?>
