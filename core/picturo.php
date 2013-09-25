@@ -26,7 +26,6 @@ class Picturo {
 
     // Load the settings
     $this->settings = $this->get_config();
-
   }
 
   public function login() {
@@ -64,8 +63,8 @@ class Picturo {
   }
 
   public function browse($path, $page) { 
-    if (!isset($_SESSION['username'])) {
-      $this->redirect('/');
+    if ($this->settings['private'] == true && !isset($_SESSION['username'])) {
+      $this->redirect('/login');
     }
 
     // Get request url and script url
@@ -132,7 +131,11 @@ class Picturo {
           $temp_url = '/'. $encoded_url . "/" . urlencode($image_basename);
           $parsed_base_url = parse_url($this->settings['base_url']);
           $temp_array['thumbnail_url'] = preg_replace('/(\/)+\//', '/', $temp_url);
-          $temp_array['url'] = preg_replace('/([^:])(\/)+\//', '/', $parsed_base_url['path'] . $temp_url);
+          if(array_key_exists("path", $parsed_base_url)) {
+            $temp_array['url'] = preg_replace('/(\/)+\//', '/', "/" . $parsed_base_url['path'] . $temp_url);
+          } else {
+            $temp_array['url'] = preg_replace('/(\/)+\//', '/', "/" . $temp_url);
+          }
           // strip the folder names and just leave the end piece without the extension
           $temp_array['name'] = $image_basename;
 
@@ -180,7 +183,6 @@ class Picturo {
 
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
     echo "<h1>Not found</h1>";
-
   }
 
 
@@ -196,6 +198,7 @@ class Picturo {
       echo $imgTag;
     });
     $twig->addFunction($thumbnail_function);
+    $twig_vars['view'] = $name;
     $twig_vars['base_url'] = $this->settings['base_url'];
     $twig_vars['theme_url'] = $this->settings['base_url'] .'/'. basename(THEMES_DIR) .'/'. $this->settings['theme'];
     $twig_vars['site_title'] = $this->settings['site_title'];
@@ -251,7 +254,8 @@ class Picturo {
       'theme' => 'default',
       'date_format' => 'jS M Y',
       'twig_config' => array('cache' => false, 'autoescape' => false, 'debug' => false),
-      'items_per_page' => 15
+      'items_per_page' => 15,
+      'private' => false
     );
 
     if(is_array($config)) {

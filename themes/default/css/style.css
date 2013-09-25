@@ -92,7 +92,7 @@ a:hover, a:active {
    text-align: center;
 }
 .login .content {
-   background: url(/themes/default/img/camera.svg) no-repeat center 0px;
+   background: url(../img/camera.svg) no-repeat center 0px;
    padding-top: 12em;
    background-size: 100px 73px;
 }
@@ -137,12 +137,12 @@ a:hover, a:active {
    border-radius: 5px;
 }
 .login input[type="text"] {
-   background: url(/themes/default/img/user.svg) no-repeat 8px 7px;
+   background: url(../img/user.svg) no-repeat 8px 7px;
    background-size: 22px;
    padding-left: 3em;
 }
 .login input[type="password"] {
-   background: url(/themes/default/img/padlock.svg) no-repeat 8px 8px;
+   background: url(../img/padlock.svg) no-repeat 8px 8px;
    background-size: 16px;
    padding-left: 3em;
 }
