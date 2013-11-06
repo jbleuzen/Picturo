@@ -1,4 +1,14 @@
 {
+  "name": "jbleuzen/picturo",
+  "description": "A simple flat file photo gallery",
+  "authors": [
+    {
+      "name": "Johan BLEUZEN",
+      "homepage": "http://www.johanbleuzen.fr",
+      "role": "Developer"
+    }
+  ],
+  "license": "MIT",
   "require": {
     "twig/twig": "1.12.*",
     "bramus/router": "dev-master"
