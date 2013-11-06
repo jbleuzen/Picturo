@@ -14,6 +14,14 @@ class Picturo {
 
   private $current_page = 0;
 
+  private $foldersPath = array();
+
+  private $folders = array();
+
+  private $imagesPath = array();
+
+  private $images = array();
+
   private $breadcrumb = array();
 
   /**
@@ -93,11 +101,9 @@ class Picturo {
     }
 
     if(is_dir($resource)) {
-      $folders = array();
-      $imagesArray = array();
-      $this->get_files($resource, $folders, $imagesArray);
+      $this->get_files($resource);
 
-      foreach($folders as &$folder) {
+      foreach($this->foldersPath as $folder) {
         $tmp_array = array();
         $tmp_array['name'] = basename($folder);
         $files = glob("$folder/*.{jpg,jpeg,JPG,JPEG}", GLOB_BRACE);
@@ -106,22 +112,22 @@ class Picturo {
         $temp_url = '/' . $url . "/" . urlencode($tmp_array['name']);
         $tmp_array['thumbnail_url'] = $temp_url . "/" . basename($files[0]);
         $tmp_array['url'] = $this->settings['base_url'] . preg_replace('/(\/)+\//', '/', $temp_url);
-        $folder = $tmp_array;
+        array_push($this->folders, $tmp_array);
       }
 
-      $this->page_count = ceil(count($imagesArray) / $this->settings['items_per_page']);
+      $this->page_count = ceil(count($this->imagesPath) / $this->settings['items_per_page']);
 
       $start = $this->current_page * $this->settings['items_per_page'];
       $images = Array();
 
       $imageCount = 0;
-      if($this->settings['items_per_page'] < count($imagesArray) - $start) {
+      if($this->settings['items_per_page'] < count($this->imagesPath) - $start) {
         $imageCount = $this->settings['items_per_page'];
       } else {
-        $imageCount = count($imagesArray) - $start;
+        $imageCount = count($this->imagesPath) - $start;
       }
       for($i = 0; $i < $imageCount; $i++) {
-        $image = $imagesArray[$i + $start];
+        $image = $this->imagesPath[$i + $start];
         if(isset($image) && ! empty($image)) {
           $temp_array = array();
           $image_basename = basename($image);
@@ -141,13 +147,14 @@ class Picturo {
 
           $images[$i] = $temp_array;
         }
+        $this->images = $images;
 
       }
       $twig_vars = array(
         'url' => "/" . $url,
         'breadcrumb' => $this->breadcrumb,
-        'folders' => $folders,
-        'images' => $images,
+        'folders' => $this->folders,
+        'images' => $this->images,
         'page_count' => $this->page_count,
         'current_page' => $this->current_page
       );
@@ -157,7 +164,7 @@ class Picturo {
         $folders = array();
         $imagesArray = array();
 
-        $this->get_files(dirname($resource)."/", $folders, $imagesArray);
+        $this->get_files(dirname($resource)."/");
         $previous = "";
         $next = "";
         for($i = 0; $i < count($imagesArray); $i++) {
@@ -217,17 +224,17 @@ class Picturo {
     exit;
   }
 
-  private function get_files($path, &$folders, &$images) {
+  private function get_files($path) {
     if($handle = opendir($path)){
       while(false !== ($file = readdir($handle))){
         if(substr($file,0,1) != "."){
           $file = $path . "/" . $file;
           $file = preg_replace("/\/\//si", "/", $file);
           if( is_dir($file)){
-            array_push($folders, $file);
+            array_push($this->foldersPath, $file);
           }
           if(is_file($file) && preg_match("/.jpg/i", $file)) {
-            array_push($images, $file);
+            array_push($this->imagesPath, $file);
           }
         }
       }
