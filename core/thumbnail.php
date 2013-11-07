@@ -1,6 +1,6 @@
 <?php 
 
-class PicturoThumbnail {
+class Thumbnail {
 
   private $width;
 
