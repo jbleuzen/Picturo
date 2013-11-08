@@ -1,11 +1,13 @@
 *** Picturo Changelog ***
 
-2013.11.08 - version 0.2.20
+2013.11.08 - version 0.3.0
  * Better composer configration
  * Refactoring : Creating basic controllers
- * Adding a thumbnail service
  * Updating default configuration
  * Bugfix on default theme
+
+2013.09.21 - version 0.2.0
+ * Adding a thumbnail service
 
 2013.09.19 - version 0.1.0
  * Refactoring : Using a new router
