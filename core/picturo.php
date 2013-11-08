@@ -27,7 +27,7 @@ class Picturo {
   public function displayFolder($path, $page) {
     global $config;
 
-    $realPath = $this->getRequestRealPath($path);
+    $realPath = $this->getRequestRealPath($path . "/");
 
     $this->generateBreadcrumb();
 
@@ -101,7 +101,7 @@ class Picturo {
   public function displayPicture($path, $extension) {
     global $config;
 
-    $realPath = $this->getRequestRealPath($path);
+    $realPath = $this->getRequestRealPath( $path . "." . $extension);
 
     $this->generateBreadcrumb();
 
@@ -140,7 +140,7 @@ class Picturo {
 
   function getRequestRealPath($path) {
    $this->url = urldecode($path);
-    $realPath =  CONTENT_DIR . $this->url . "/";
+   $realPath =  CONTENT_DIR . $this->url;
    return $realPath;
   }
 
