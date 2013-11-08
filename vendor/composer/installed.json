@@ -1,0 +1,101 @@
+[
+    {
+        "name": "bramus/router",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bramus/router.git",
+            "reference": "6ab1365160b4a53f671cdfdf388201c5dc049829"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bramus/router/zipball/6ab1365160b4a53f671cdfdf388201c5dc049829",
+            "reference": "6ab1365160b4a53f671cdfdf388201c5dc049829",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/php-code-coverage": "1.3.*@dev",
+            "phpunit/phpunit": "3.7.x"
+        },
+        "time": "2013-09-19 21:15:18",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Bramus": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Bram(us) Van Damme",
+                "email": "bramus@bram.us",
+                "homepage": "http://www.bram.us"
+            }
+        ],
+        "description": "A lightweight and simple object oriented PHP Router",
+        "homepage": "https://github.com/bramus/router",
+        "keywords": [
+            "router",
+            "routing"
+        ]
+    },
+    {
+        "name": "twig/twig",
+        "version": "v1.12.3",
+        "version_normalized": "1.12.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Twig.git",
+            "reference": "27f3428b08c7f656d6824359a9d9dee3f5fce31b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Twig/zipball/27f3428b08c7f656d6824359a9d9dee3f5fce31b",
+            "reference": "27f3428b08c7f656d6824359a9d9dee3f5fce31b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2013-04-08 12:40:11",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
+    }
+]

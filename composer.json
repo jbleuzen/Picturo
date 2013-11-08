@@ -9,6 +9,9 @@
     }
   ],
   "license": "MIT",
+  "config": {
+    "preferred-install": "dist"
+  },
   "require": {
     "twig/twig": "1.12.*",
     "bramus/router": "dev-master"
