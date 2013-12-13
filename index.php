@@ -25,6 +25,8 @@ $router->get('/logout', function() {
 });
 
 $router->get('/thumbnail/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
+  global $config;
+
   if ($config['private'] == true && !isset($_SESSION['username'])) {
     Helper::redirect('/login');
   }
@@ -34,6 +36,8 @@ $router->get('/thumbnail/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
 });
 
 $router->get('/(.*)\.(.*)$', function($path, $extension) {
+  global $config;
+
   if ($config['private'] == true && !isset($_SESSION['username'])) {
     Helper::redirect('/login');
   }
@@ -43,6 +47,8 @@ $router->get('/(.*)\.(.*)$', function($path, $extension) {
 });
 
 $router->get('/(.*)/page([0-9]*)', function($path, $page = 1) {
+  global $config;
+
   if ($config['private'] == true && !isset($_SESSION['username'])) {
     Helper::redirect('/login');
   }
@@ -52,6 +58,8 @@ $router->get('/(.*)/page([0-9]*)', function($path, $page = 1) {
 });
 
 $router->get('/(.*)', function($path) {
+  global $config;
+
   if ($config['private'] == true && !isset($_SESSION['username'])) {
     Helper::redirect('/login');
   }
