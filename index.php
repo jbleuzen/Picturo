@@ -9,6 +9,14 @@ Helper::loadConfig();
 // Routing
 $router = new \Bramus\Router\Router();
 
+$router->before('GET|POST', '/*', function() {
+  global $config;
+
+  if ($config['private'] == true && !isset($_SESSION['username']) && ! preg_match("@/login@", $_SERVER["REQUEST_URI"])) {
+    Helper::redirect('/login');
+  }
+});
+
 $router->get('/login', function() {
   $controller = new Auth();
   $controller->login();
@@ -25,45 +33,21 @@ $router->get('/logout', function() {
 });
 
 $router->get('/thumbnail/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
-  global $config;
-
-  if ($config['private'] == true && !isset($_SESSION['username'])) {
-    Helper::redirect('/login');
-  }
-
   $controller = new Thumbnail($width, $height, $path);
   $controller->serve();
 });
 
 $router->get('/(.*)\.(.*)$', function($path, $extension) {
-  global $config;
-
-  if ($config['private'] == true && !isset($_SESSION['username'])) {
-    Helper::redirect('/login');
-  }
-
   $controller = new Picturo();
   $controller->displayPicture($path, $extension);
 });
 
 $router->get('/(.*)/page([0-9]*)', function($path, $page = 1) {
-  global $config;
-
-  if ($config['private'] == true && !isset($_SESSION['username'])) {
-    Helper::redirect('/login');
-  }
-
   $controller = new Picturo();
   $controller->displayFolder($path, $page);
 });
 
 $router->get('/(.*)', function($path) {
-  global $config;
-
-  if ($config['private'] == true && !isset($_SESSION['username'])) {
-    Helper::redirect('/login');
-  }
-
   $controller = new Picturo();
   $controller->displayFolder($path, 1);
 });
