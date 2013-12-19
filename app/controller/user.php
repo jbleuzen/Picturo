@@ -1,29 +1,29 @@
 <?php 
 
-class Auth {
+class ControllerUser {
 
-  public function login() {
+  public function get_login() {
     global $config;
 
     if($config['private'] === true) {
       // If already logged in will be redirectec to '/'
       if( ! isset($_SESSION['username']) || $_SESSION['username'] == "") {
-        Helper::renderView('login', array());
+        HelperConfig::renderView('login', array());
       }
     }
     Helper::redirect ('/');
   }
 
-  public function logout() {
+  public function get_logout() {
     if(isset($_SESSION['username'])) {
       session_destroy();
-      Helper::redirect('/login');
+      HelperConfig::redirect('/login');
     } else {
-      Helper::redirect('/');
+      HelperConfig::redirect('/');
     }
   }
 
-  public function authenticate() {
+  public function post_login() {
     global $config;
 
     $postUsername = $_POST['username'];
@@ -31,12 +31,12 @@ class Auth {
     if(isset($postUsername) && isset($postPassword)) {
       if(isset($config['private_pass'][$postUsername]) == true && $config['private_pass'][$postUsername] == sha1($postPassword)) {
         $_SESSION['username'] = $postUsername;
-        Helper::redirect('/');
+        HelperConfig::redirect('/');
       }
       $view_vars['login_error'] = 'Invalid login';
       $view_vars['login_username'] = $postUsername;
 
-      Helper::renderView('login', $view_vars);
+      HelperConfig::renderView('login', $view_vars);
     }
   }
 

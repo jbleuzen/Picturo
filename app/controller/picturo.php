@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/MIT
  * @version 0.6.2
  */
-class Picturo {
+class ControllerPicturo {
 
   private $current_page = 0;
 
@@ -91,7 +91,7 @@ class Picturo {
         'page_count' => $this->page_count,
         'current_page' => $this->current_page
       );
-      Helper::renderView('gallery', $twig_vars);
+      HelperConfig::renderView('gallery', $twig_vars);
     }
 
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
@@ -124,14 +124,14 @@ class Picturo {
 
       $view_vars = array(
         "breadcrumb" => $this->breadcrumb,
-        "image_url" => $config['base_url'] . "/content/" . str_replace(CONTENT_DIR, "", $realPath),
+        "image_url" => $config['base_url'] . "/img/original/" . str_replace(CONTENT_DIR, "", $realPath),
         "image_previous_url" =>  $config['base_url'] . "/" . str_replace(CONTENT_DIR, "", $previous),
         "image_next_url" => $config['base_url'] . "/" . str_replace(CONTENT_DIR, "", $next)
       );
-      Helper::renderView('detail', $view_vars);
+      HelperConfig::renderView('detail', $view_vars);
     }
 
-    Helper::renderNotFound();
+    HelperConfig::renderNotFound();
   }
 
 

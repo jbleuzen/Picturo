@@ -1,9 +1,9 @@
 <?php
 
-include 'bootstrap.php';
+include '../bootstrap.php';
 
 
-Helper::loadConfig();
+HelperConfig::loadConfig();
 
 
 // Routing
@@ -13,42 +13,48 @@ $router->before('GET|POST', '/*', function() {
   global $config;
 
   if ($config['private'] == true && !isset($_SESSION['username']) && ! preg_match("@/login@", $_SERVER["REQUEST_URI"])) {
-    Helper::redirect('/login');
+    HelperConfig::redirect('/login');
   }
 });
 
 $router->get('/login', function() {
-  $controller = new Auth();
-  $controller->login();
+  $controller = new ControllerUser();
+  $controller->get_login();
 });
 
 $router->post('/login', function() {
-  $controller = new Auth();
-  $controller->authenticate();
+  $controller = new ControllerUser();
+  $controller->post_login();
 });
 
 $router->get('/logout', function() {
-  $controller = new Auth();
-  $controller->logout();
+  $controller = new ControllerUser();
+  $controller->get_logout();
 });
 
-$router->get('/thumbnail/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
-  $controller = new Thumbnail($width, $height, $path);
+$router->get('/img/original/(.*)', function($path) {
+  $controller = new HelperThumbnail($path);
+  $controller->serve();
+});
+
+$router->get('/img/(\d+)x(\d+)/(.*)', function($width, $height, $path) {
+  $controller = new HelperThumbnail($path);
+  $controller->setThumbnailSize($width, $height);
   $controller->serve();
 });
 
 $router->get('/(.*)\.(.*)$', function($path, $extension) {
-  $controller = new Picturo();
+  $controller = new ControllerPicturo();
   $controller->displayPicture($path, $extension);
 });
 
 $router->get('/(.*)/page([0-9]*)', function($path, $page = 1) {
-  $controller = new Picturo();
+  $controller = new ControllerPicturo();
   $controller->displayFolder($path, $page);
 });
 
 $router->get('/(.*)', function($path) {
-  $controller = new Picturo();
+  $controller = new ControllerPicturo();
   $controller->displayFolder($path, 1);
 });
 

@@ -1,6 +1,6 @@
 <?php
 
-class Helper {
+class HelperConfig {
 
   public static function loadConfig() {
     if(!file_exists(CONF_DIR .'config.php')) {
@@ -51,7 +51,7 @@ class Helper {
     $twig->addExtension(new Twig_Extension_Debug());
     $base_url = $config['base_url'];
     $thumbnail_function = new Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height)  use($base_url) {
-      $imgTag = "<img src='" . $base_url . "/thumbnail/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
+      $imgTag = "<img src='" . $base_url . "/img/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
       echo $imgTag;
     });
     $twig->addFunction($thumbnail_function);
