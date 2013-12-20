@@ -9,7 +9,7 @@ HelperConfig::loadConfig();
 // Routing
 $router = new \Bramus\Router\Router();
 
-$router->before('GET|POST', '/*', function() {
+$router->before('GET|POST', '/.*', function() {
   global $config;
 
   if ($config['private'] == true && !isset($_SESSION['username']) && ! preg_match("@/login@", $_SERVER["REQUEST_URI"])) {
