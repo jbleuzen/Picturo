@@ -24,6 +24,6 @@ $config['private_pass']['admin'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';
 $config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_setting }} in a theme
 
 */
-
+$config['site_title'] = 'Picturo';
 $config['private'] = true;
-$config['private_pass']['admin'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';
+?>

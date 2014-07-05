@@ -2,19 +2,135 @@
 
 {% block title %}Login{% endblock %}
 
-{% block bodyClass %}login{% endblock %}
+{% block bodyClass %}{% if admin %}new{% else %}login{% endif %}{% endblock %}
 
 {% block content %}
-    <form method="post" action="">
-    {% if login_error %}
+
+  <form method="post" action="">
+    {% if (admin == false and login_error) or (admin and msg == '') %}
       <p class="error">{{ login_error }}</p>
     {% endif %}
+
     <p>
       <input type="text" name="username" id="username" required placeholder="Username" value="{{ login_username }}" autocomplete="off"/>
     </p>
     <p>
       <input type="password" name="password" id="password" required placeholder="Password"/>
     </p>
-    <input class="alignright" type="submit" value="Login" />
+    <input type="submit" value="{% if admin %}Create{% else %}Login{% endif %}" />
   </form>
+  {% if admin and users %}
+
+  <h3>Users already used</h3>
+  <form method="post" action="" class="indentleft">
+    <table class="indentleft">
+      <tr class="row">
+        <th class="cell">User</th>
+        <th class="cell">Folders to hide</th>
+    {% for user in users|keys%}
+        {% if loop.length > 1 and loop.index == 1  %}
+
+        <th class="cell">User</th>
+        <th class="cell">Folders to hide</th>
+      </tr><!-- /.row -->
+        {% elseif loop.length == 1 %}
+
+      </tr><!-- /.row -->
+        {% endif %}
+      {% if loop.index%2 == 1  %} 
+      
+      <tr class="row">
+      {% endif %}
+
+        <td class="name">{{ user }}</td>
+        <td class="select"><div class="arrow">&#9660;</div><div class="select">
+          {% for folder in folders%}
+
+          {{ picturo_checkbox(user, folder.name) }}
+          {% endfor %}
+
+        </div></td>
+      {% if (loop.length > 1 and loop.index%2 == 0) or loop.length == 1  %} 
+
+      </tr><!-- /.row -->
+      {% endif %}
+      {% if (loop.length > 1 and loop.length%2 != 0 and loop.last)  %} 
+
+      </tr><!-- /.row -->
+      {% endif %}
+    {% endfor %}
+
+    </table>
+    <input type="hidden" name="manageRights" value="on" />
+    <input class="aligncenter" type="submit" value="Change" />
+  </form>
+  {% endif %}
+  <script type="text/javascript">
+;(function(window,undefined) {
+  'use_strict';
+
+  function isBrowserIE() {
+     return /*@cc_on!@*/0;
+  }
+
+  var toggle = {
+        init: function() {
+            var div = document.getElementsByTagName('div');
+            for (var i = 0, c = div.length; i < c; i++) {
+              if (div[i].className == 'select' || div[i].className == 'arrow') {
+                this.addEventListener(div[i],"click", this);
+              }
+            };
+        },
+        addEventListener: function(el, eventName, handler) {
+            if (el.addEventListener) {
+                el.addEventListener(eventName, handler, false);
+            } else {
+                el.attachEvent('on' + eventName, toggle.handleEvent);
+            }
+        },
+        handleEvent: function(e) {
+            if (isBrowserIE()) {
+                var obj = null;
+                obj = toggle;
+            } else {
+                var obj = Object.create(null);
+                obj = this;
+            }
+            var evt = e ? e:event;
+
+            obj.action(evt.target || evt.srcElement);
+        },
+        action: function(a) {
+            if (isBrowserIE()) {
+                var obj = null;
+                obj = toggle;
+            } else {
+                var obj = Object.create(null);
+                obj = this;
+            }
+            if (a.tagName == 'DIV') {
+              if (a.parentNode.lastChild.getAttribute('style') == '' || a.parentNode.lastChild.getAttribute('style') == null || a.parentNode.lastChild.getAttribute('style') == 'max-height:30px;') {
+                a.parentNode.lastChild.setAttribute('style', 'max-height:100%;');
+                a.parentNode.lastChild.setAttribute('style', 'max-height:100%;');
+              } else {
+                a.parentNode.lastChild.setAttribute('style', 'max-height:30px;');
+              }
+            }
+            if (a.tagName == 'TD') {
+              if (a.lastChild.getAttribute('style') == '' || a.lastChild.getAttribute('style') == null || a.lastChild.getAttribute('style') == 'max-height:30px;') {
+                a.lastChild.setAttribute('style', 'max-height:100%;');
+                a.lastChild.setAttribute('style', 'max-height:100%;');
+              } else {
+                a.lastChild.setAttribute('style', 'max-height:30px;');
+              }
+            }
+          return true;
+        }
+      };
+
+      // Init
+      toggle.init(); 
+})(window);
+</script>
 {% endblock %}

@@ -1,0 +1,124 @@
+{% extends "template.twig" %}
+
+{% block title %}Modification{% endblock %}
+
+{% block bodyClass %}modifications{% endblock %}
+
+{% block content %}
+{%if breadcrumb %}
+
+<ul class="breadcrumb">
+   {% for link,url in breadcrumb %}
+   <li>
+   {% if url %}
+   <a href="{{ url }}">{{ link }}</a></li>
+   {% else %}
+   {{ link }}
+   {% endif %}
+   {% endfor %}
+</ul>
+{% endif %}
+
+<div id="custom-image">
+	<h2>Modification d'une image</h2>
+	{% if mode == 'preview' %} {{ picturo_preview(thumbnail_url,164,164,t,w,h,x,y,d) }} {% else %} {{ picturo_thumbnail(thumbnail_url, 164, 164) }} {% endif %}
+</div>
+
+<div id="custom-image-form">
+<p class="field_head">
+	&Eacute;tat&nbsp;:&nbsp;
+	<strong>{% if mode == 'preview' %} Pr&eacute;visualisation (<a href="{{ image.url }}">r&eacute;initialiser</a>) {% else %} Image enregistr&eacute;e  {% endif %}</strong>
+</p>
+<form method="post" action="{{pathOfPage}}">
+	<h3>Retourner</h3>
+	<select name="d">
+		<option value="90"{% if d == 90 %}  selected="selected"{% endif %} >vers la gauche</option>
+		<option value="270"{% if d == 270 %} selected="selected"{% endif %} >vers la droite</option>
+		<option value="180"{% if d == 180 %} selected="selected"{% endif %} >de 180 degr&eacute;s</option>
+	</select>
+	<p class="image_form_validation">
+		<input type="hidden" value="rotate" name="transform"/>
+		{{tokenForm}}
+
+		<input type="submit" class="image_preview"  value="Voir" name="preview"/>
+		<input type="submit" class="image_update"   value="Ok" name="update"/>
+	</p>
+</form>
+<form method="post" action="{{pathOfPage}}">	
+	<h3>R&eacute;duire <span class="image_form_info">(largeur x hauteur)</span></h3>
+	<input class="image_dimension" type="text" value="{% if t == 'reduce' %}{{w}}{% else %}0{% endif %}" name="w" size="1" maxlength="3"/>
+	&nbsp; x &nbsp;
+	<input class="image_dimension" type="text" value="{% if t == 'reduce' %}{{h}}{% else %}0{% endif %}" name="h" size="1" maxlength="3"/>
+	<p class="image_form_validation">
+		<input type="hidden" value="reduce" name="transform"/>
+		{{tokenForm}}
+
+		<input type="submit" class="image_preview"  value="Voir" name="preview"/>
+		<input type="submit" class="image_update"   value="Ok" name="update"/>
+	</p>
+</form>
+<form method="post" action="{{pathOfPage}}">	
+	<h3>R&eacute;duire et couper <span class="image_form_info">(largeur x hauteur)</span></h3>
+	<input class="image_dimension" type="text" value="{% if t == 'reducecrop' %}{{w}}{% else %}0{% endif %}" name="w" size="1" maxlength="3"/>
+	&nbsp; x &nbsp;
+	<input class="image_dimension" type="text" value="{% if t == 'reducecrop' %}{{h}}{% else %}0{% endif %}" name="h" size="1" maxlength="3"/>
+	<p class="image_form_validation">
+		<input type="hidden" value="reducecrop" name="transform"/>
+		{{tokenForm}}
+
+		<input type="submit" class="image_preview"  value="Voir" name="preview"/>
+		<input type="submit" class="image_update"   value="Ok" name="update"/>
+	</p>
+</form>
+<form method="post" action="{{pathOfPage}}">	
+	<h3>Redimensionner</h3>
+	<input class="image_dimension" type="text" value="{% if t == 'setwidth' %}{% if toggle == 'height' %}{{h}}{% else %}{{w}}{% endif %}{% else %}0{% endif %}" name="w" size="1" maxlength="3"/>
+	<select name="toggle">
+		<option value="height"{% if t == 'setwidth' and toggle == 'height' %} selected="selected" {% endif %}>en hauteur</option>
+		<option value="none"{% if t != 'setwidth' and toggle != 'height' %} selected="selected" {% endif %}>en largeur</option>
+	</select>
+	<p class="image_form_validation">
+		<input type="hidden" value="setwidth" name="transform"/>
+		{{tokenForm}}
+
+		<input type="submit" class="image_preview"  value="Voir" name="preview"/>
+		<input type="submit" class="image_update"   value="Ok" name="update"/>
+	</p>
+</form>
+<form method="post" action="{{pathOfPage}}">
+	<h3>Rogner</h3>
+	<input class="image_dimension" type="text" value="{{absXY}}" name="x" size="1" maxlength="3"/>
+	<select name="toggle">
+		<option value="left"{% if t == 'cut'  and  toggle == 'left' %} selected="selected" {% endif %}>&agrave; gauche</option>
+		<option value="right"{% if t == 'cut'  and  toggle == 'right' %} selected="selected" {% endif %}>&agrave; droite</option>
+		<option value="top"{% if t == 'cut'  and  toggle == 'top' %} selected="selected" {% endif %}>en haut</option>
+		<option value="bottom"{% if t == 'cut'  and  toggle == 'bottom' %} selected="selected" {% endif %}>en bas</option>
+	</select>&nbsp;
+	<p class="image_form_validation">
+		<input type="hidden" value="cut" name="transform"/>
+		{{tokenForm}}
+
+		<input type="submit" class="image_preview"  value="Voir" name="preview"/>
+		<input type="submit" class="image_update"   value="Ok" name="update"/>
+	</p>
+</form>
+</div>
+<div id="custom-image-help">
+	<h2>Aide</h2>
+	<h3>Principes g&eacute;n&eacute;raux</h3>
+	<p>Les dimensions sont exprim&eacute;es en pixels.</p>
+	<p>&laquo; 0 &raquo; correspond &agrave; la valeur par d&eacute;faut, c'est &agrave; dire la dimension de l'original.</p>
+	<h3>Pivoter </h3>
+	<p>Effectue une rotation de l'image selon un angle droit.</p>
+	<h3>R&eacute;duire </h3>
+	<p>Minimise l'image en conservant les proportions de sorte que ses dimensions sont inf&eacute;rieures ou &eacute;gales &agrave; celles indiqu&eacute;es.</p>
+	<h3>R&eacute;duire et couper </h3>
+	<p>Minimise l'image en conservant les proportions puis la coupe de sorte que ses dimensions sont exactement celles indiqu&eacute;es.</p>
+	<h3>Redimensionner </h3>
+	<p>R&eacute;duit ou agrandit l'image en conservant ses proportions selon la largeur ou la hauteur indiqu&eacute;e.</p>
+	<h3>Rogner </h3>
+	<p>Rogne l'image du nombre de pixels indiqu&eacute;s en partant de la gauche, de la droite, du haut ou du bas.</p>
+</div>
+
+
+{% endblock %}

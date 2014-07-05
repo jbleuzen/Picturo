@@ -18,15 +18,9 @@
    {% endfor %}
 </ul>
 {% endif %}
-<p class="droite">{{ picturo_download(thumbnail_url) }}</p>
 <div class="image-wrapper">
-   {% if image_previous_url != base_url ~ "/" %}
-   <a class="previous-image" href="{{ image_previous_url }}">❮</a>
-   {% endif %}
-   {% if image_next_url != base_url ~ "/" %}
-   <a class="next-image" href="{{ image_next_url }}">❯</a>
-   {% endif %}
-   {{ picturo_thumbnail(thumbnail_url, 900, 675) }}
+   Erreur 404 ! Fichier non trouvé.
+   {% if error_msg %}<br/>{{ error_msg }}{% endif %}
 </div>
 
 {% endblock %}
