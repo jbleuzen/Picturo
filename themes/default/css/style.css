@@ -5,7 +5,14 @@
 /*=================================*/
 /* Main Styles
 /*---------------------------------------------*/
-body {
+html, body {
+   margin: 0; padding: 0;
+   height: 100%;
+}
+body {      
+   display : table;
+   height: 100%;
+   width:100%;
    font: 14px/1.8em Verdana, sans-serif;
    color: #444;
    background: #EFEFEF;
@@ -61,7 +68,6 @@ a:hover, a:active {
    font-weight: bold;
    margin-left: 20px;
 }
-
 .footer {
    background: #707070;
    padding: 1.5em 0;
@@ -71,6 +77,11 @@ a:hover, a:active {
 .footer a { color: #ddd; }
 .footer a:hover { color: #fff; }
 
+[role=footer] {
+   display : table-row;
+   height: 100px;
+   text-align: left;
+}
 /* Misc Styles
 /*---------------------------------------------*/
 .clearfix:before,
@@ -84,11 +95,21 @@ a:hover, a:active {
 .clearfix {
    *zoom: 1;
 }
-
+.droite {
+   right:5em;
+   margin-top:-6em;
+   position:absolute;
+}
+.droite a:active, .droite a:focus{
+   outline:none;
+}
 /* Login
 /*---------------------------------------------*/
 .login {
    margin-top: 8em;
+   text-align: center;
+}
+.new {
    text-align: center;
 }
 .login .content {
@@ -96,7 +117,8 @@ a:hover, a:active {
    padding-top: 12em;
    background-size: 100px 73px;
 }
-.login form {
+.login form,
+.new form {
    background-color: #FFF;
    max-width: 400px;
    margin: 0 auto;
@@ -105,7 +127,8 @@ a:hover, a:active {
    border-bottom: 1px solid #CCC;
    position:relative;
 }
-.login form:before {
+.login form:before,
+.new form:before {
    width: 0px;
    height: 0px;
    border-style: solid;
@@ -116,7 +139,10 @@ a:hover, a:active {
    top: -2em;
    left: 186px;
 }
-.error {
+.new form:before {
+   border:0;
+}
+.error, .success {
    font-size: 18px;
    color: #E74C3C;
    padding: 10px;
@@ -125,7 +151,8 @@ a:hover, a:active {
    /* color: #FFF; */
    border-radius: 30px;
 }
-.login input {
+.login input,
+.new input {
    padding: 10px 40px 10px 10px;
    font: 400 1em Verdana, Sans-serif;
    color: #333;
@@ -136,17 +163,20 @@ a:hover, a:active {
    border: 1px solid lightgrey;
    border-radius: 5px;
 }
-.login input[type="text"] {
+.login input[type="text"],
+.new input[type="text"] {
    background: url(../img/user.svg) no-repeat 8px 7px;
    background-size: 22px;
    padding-left: 3em;
 }
-.login input[type="password"] {
+.login input[type="password"],
+.new input[type="password"] {
    background: url(../img/padlock.svg) no-repeat 8px 8px;
    background-size: 16px;
    padding-left: 3em;
 }
-.login input[type="submit"] {
+.login input[type="submit"],
+.new input[type="submit"] {
    width: 200px;
    background-color: #2EAE9B;
    color: #FFF;
@@ -154,8 +184,53 @@ a:hover, a:active {
    padding: 10px;
    margin-bottom: 2em;       
 }
+form.indentleft {
+   max-width:90%;
+}
+.indentleft, .select {
+   text-align: left;
+}
+.row .cell {
+   font-weight: bolder;
+} 
+.row .name {
+   width: 100px;
+   padding:0 10px;
+}
+.new .select input,
+.new .select label {
+   cursor: pointer;
+}
+.arrow {
+   cursor: pointer;
+   padding: 0 5px;
+   font-size: 5px;
+   width:20px;
+   min-height:100%;
+   text-align: center;
+   float: right;
+   margin-bottom:-100px;
+}
+.select{
+   cursor: pointer;
+   padding:0 40px 0 0;
+   margin:0 0 5px 0;
+   max-height: 30px;
+   overflow-y: scroll;
+   clear: both;
+}
+div.select {
+   border: 1px solid #ccc;
+}
+.select input {
+   margin:10px;
+   width:auto;
 
-
+}
+.indentleft .aligncenter {
+   display: block;
+   margin:40px auto;
+}
 /* Gallery
 /*---------------------------------------------*/
 .gallery .folder {
@@ -272,6 +347,7 @@ img {
 }
 .image-wrapper img {
    border-bottom: 1px solid #CCC;
+   width:900px;
 }
 .previous-image, .next-image {
    position: absolute;
@@ -289,4 +365,86 @@ img {
 }
 .next-image {
    right: -3em;
+}
+#msg {
+   padding:10px;
+}
+.success {
+   border-color: #51a351 #51a351 #387038;
+   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+   background-color: #5bb75b;
+   background-image: -moz-linear-gradient(top, #62c462, #51a351);
+   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+   background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+   background-image: -o-linear-gradient(top, #62c462, #51a351);
+   background-image: linear-gradient(to bottom, #62c462, #51a351);
+   background-repeat: repeat-x;
+   color: #ffffff;
+   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+   background-color: #51a351;
+}
+.success a {
+   color:#222;
+}
+.error {
+   border-color: #bd362f #bd362f #802420;
+   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+   background-color: #da4f49;
+   background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+   background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
+   background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+   background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);
+   background-repeat: repeat-x;
+   color: #ffffff;
+   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffbd362f', GradientType=0);
+   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+   background-color: #bd362f;
+}
+#custom-image {
+   float:left;
+   padding:5px 0 ;
+   min-width:400px;
+}
+#custom-image-form {
+   padding:5px 0 5px 25px ;
+   float:left;
+   width:360px;
+}
+#custom-image-form  p.field_head {
+   margin-top:20px;
+   margin-right:0;
+}
+#custom-image-form  h3  {
+   padding:1.5em 0 0.5em 0 ;
+   margin:0;
+}
+#custom-image-form  h3 span.image_form_info  {
+   font-size:11px;
+   font-weight:normal ;
+}
+#custom-image-form  input.image_dimension, #custom-image-form  input.image_rename {
+   padding-bottom:1px !important;
+   padding-top:1px !important;
+}
+#custom-image-form  p.image_form_validation {
+   padding:0 ;
+   float:right;
+   font-weight:bold;
+}
+#custom-image-help {
+   clear:both;
+   padding-top:10px;
+}
+@media screen and (max-width:1100px) {
+   .image-wrapper img {
+      position: relative;
+      border-bottom: 0;
+      max-width:100%;
+      box-sizing: border-box;
+      margin:auto;
+   }
 }

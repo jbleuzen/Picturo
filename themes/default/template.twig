@@ -2,34 +2,65 @@
 <html>
    <head>
       <meta charset="utf-8" />
-      <link rel="icon" href="{{ theme_url }}/favicon.ico"/>
+      <link rel="icon" href="{{ theme_url }}/img/favicon.ico"/>
       <link rel="stylesheet" href="{{ theme_url }}/css/normalize.css" />
       <link rel="stylesheet" href="{{ theme_url }}/css/style.css" />
       <title>{% block title %}{% endblock %} - {{ site_title }}</title>
    </head>
    <body class="{% block bodyClass %}{% endblock %}">
+
       {% if view != "login" %}
+
       <header class="header clearfix">
          <div class="inner">
             <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
             {% if username != "" %}
+
             <ul class="nav">
                <li>Hey {{ username }} !</li>
+               {% if admin %}
+
+               <li><a href="{{ base_url }}/createUser">Manage users</a></li>
+               {% endif %}
+
                <li><a href="{{ base_url }}/logout">Logout</a></li>
             </ul>
             {% endif %}
+
          </div>
       </header>
       {% endif %}
+      {% if view == "login" and admin %}
 
+      <header class="header clearfix">
+         <div class="inner">
+            <h1><a href="{{ base_url }}">{{ site_title }}</a></h1>
+            {% if username != "" %}
+
+            <ul class="nav">
+               <li>Hey {{ username }} !</li>
+               {% if admin %}
+
+               <li>Create a new user</li>
+               {% endif %}
+
+               <li><a href="{{ base_url }}/logout">Logout</a></li>
+            </ul>
+            {% endif %}
+
+         </div>
+      </header>
+      {% endif %}
       <div class="content inner">
+         {{msg}}
          {% block content %}{% endblock %}
       </div>
-
-      {% if view != "login" %}
-      <footer class="footer">
+      {% if view != "login" or (view == "login" and admin) %}
+      <footer class="footer" role="footer">
          <div class="inner">
             <a href="https://github.com/jbleuzen/Picturo">Picturo</a> was made by <a href="http://www.johanbleuzen.fr">Johan BLEUZEN</a> and inspired by <a href="https://github.com/gilbitron/Pico">Pico</a>.
+            <br/>
+            Modified by <a href="http://www.ecyseo.net">Cyril MAGUIRE</a>.
          </div>
       </footer>
       {% endif %}

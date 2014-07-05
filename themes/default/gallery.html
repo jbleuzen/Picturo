@@ -50,7 +50,7 @@
          {% if i == 1 %}
          <li><a href="{{base_url}}{{ url }}">{{ i }}</a></li>
          {% else %}
-         <li><a href="{{base_url}}{{ url }}/page{{ i }}"> {{ i }}</a></li>
+         <li><a href="{{base_url}}{{ url }}page{{ i }}"> {{ i }}</a></li>
          {% endif %}
          {% endif %}
          {% endfor %}
@@ -58,5 +58,34 @@
       {% endif %}
    </div>
 </div>
+{% if folders == false %}
+<script type="text/javascript">
+      <!--
+      // better image preloading @ http://perishablepress.com/press/2009/12/28/3-ways-preload-images-css-javascript-ajax/
+;(function(window,undefined){
 
+   'use_strict';
+   function preloader() {
+       if (document.getElementById) {
+          {% for img in preloader %}
+
+            var address{{ loop.index }}  = '{{ img }}';
+            var preloader{{ loop.index }}  = document.getElementById("preload-{{ loop.index }} ");
+            preloader{{ loop.index }} .style.backgroundImage = 'url("'+address{{ loop.index }} +'")';
+            preloader{{ loop.index }} .style.backgroundPosition = '-9999px -9999px';
+            preloader{{ loop.index }} .style.backgroundRepeat = 'no-repeat';
+         {% endfor %}
+          
+       }
+    }
+    window.onload = preloader;
+})(window);     
+      //-->
+</script>
+
+{% for img in preloader %}
+   
+   <div id="preload-{{ loop.index }} "></div>
+{% endfor %}
+{% endif %}
 {% endblock %}

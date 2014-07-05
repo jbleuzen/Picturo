@@ -6,6 +6,11 @@
       "name": "Johan BLEUZEN",
       "homepage": "http://www.johanbleuzen.fr",
       "role": "Developer"
+    },
+    {
+      "name": "Cyril MAGUIRE",
+      "homepage": "http://www.ecyseo.net",
+      "role": "Developer"
     }
   ],
   "license": "MIT",
