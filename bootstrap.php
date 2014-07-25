@@ -1,11 +1,12 @@
 <?php
 
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
-define('CONTENT_DIR', ROOT_DIR .'content/');
 define('CORE_DIR', ROOT_DIR .'core/');
 define('CONF_DIR', ROOT_DIR .'conf/');
-define('THEMES_DIR', ROOT_DIR .'themes/');
-define('CACHE_DIR', ROOT_DIR .'cache/');
+define('WWW_DIR', ROOT_DIR .'www/');
+define('CONTENT_DIR', WWW_DIR .'content/');
+define('THEMES_DIR', WWW_DIR .'themes/');
+define('CACHE_DIR', WWW_DIR .'cache/');
 
 
 // Autoload

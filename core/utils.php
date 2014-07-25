@@ -73,7 +73,7 @@ class Helper {
     // If 404 in theme render it
     // Then render default 404 in src/views
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-    echo "<h1>Not found</h1>";
+    echo "<h1>iNot found</h1>";
   }
 
   //-- Private functions -------------------------------------------------------------------------- 
