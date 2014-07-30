@@ -1,4 +1,4 @@
-cache/*
+www/cache/*
 www/content/*
 
 composer.lock
