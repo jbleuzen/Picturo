@@ -13,7 +13,7 @@
     "preferred-install": "dist"
   },
   "require": {
-    "twig/twig": "1.12.*",
+    "twig/twig": "1.*",
     "bramus/router": "dev-master"
   }
 }
