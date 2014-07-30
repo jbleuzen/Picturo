@@ -1,5 +1,5 @@
-cache/*
-content
+www/cache/*
+www/content/*
 
 composer.lock
 composer.phar

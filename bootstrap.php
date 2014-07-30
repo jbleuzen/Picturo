@@ -1,22 +1,25 @@
 <?php
 
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
-define('CONTENT_DIR', ROOT_DIR .'content/');
-define('APP_DIR', ROOT_DIR .'app/');
+define('CORE_DIR', ROOT_DIR .'core/');
 define('CONF_DIR', ROOT_DIR .'conf/');
-define('THEMES_DIR', ROOT_DIR .'www/themes/');
-define('CACHE_DIR', ROOT_DIR .'cache/');
+define('WWW_DIR', ROOT_DIR .'www/');
+define('CONTENT_DIR', WWW_DIR .'content/');
+define('THEMES_DIR', WWW_DIR .'themes/');
+define('CACHE_DIR', WWW_DIR .'cache/');
 
-
-// Autoload
+// Autoload vendors
 require(ROOT_DIR .'vendor/autoload.php');
 
-spl_autoload_register(function( $class ) {
-  $classFile = str_replace( '\\', DIRECTORY_SEPARATOR, $class );
-  // Spliting Uppercase and adding a seperator between words
-  $classPath = preg_replace('/(?<!^)([A-Z])/', DIRECTORY_SEPARATOR . '\\1', $classFile);
-  $classPath = strtolower($classPath);
- 
-  include_once(APP_DIR . $classPath . '.php');
-});
+function PicturoAutoload($class) {
+  spl_autoload_register(function( $class ) {
+    $classFile = str_replace( '\\', DIRECTORY_SEPARATOR, $class );
+    $classPI = pathinfo( $classFile );
+    $classPath = strtolower( $classPI[ 'dirname' ] );
+
+    include_once( $classPath . DIRECTORY_SEPARATOR . $classPI[ 'filename' ] . '.php' );
+  });
+}
+
+spl_autoload_register('PicturoAutoload');
 
