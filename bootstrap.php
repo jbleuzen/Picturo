@@ -8,12 +8,18 @@ define('CONTENT_DIR', WWW_DIR .'content/');
 define('THEMES_DIR', WWW_DIR .'themes/');
 define('CACHE_DIR', WWW_DIR .'cache/');
 
-
-// Autoload
+// Autoload vendors
 require(ROOT_DIR .'vendor/autoload.php');
-function picturo_autoload($class) {
-  $class = strtolower($class);
-  include CORE_DIR . $class . '.php';
+
+function PicturoAutoload($class) {
+  spl_autoload_register(function( $class ) {
+    $classFile = str_replace( '\\', DIRECTORY_SEPARATOR, $class );
+    $classPI = pathinfo( $classFile );
+    $classPath = strtolower( $classPI[ 'dirname' ] );
+
+    include_once( $classPath . DIRECTORY_SEPARATOR . $classPI[ 'filename' ] . '.php' );
+  });
 }
-spl_autoload_register('picturo_autoload');
+
+spl_autoload_register('PicturoAutoload');
 

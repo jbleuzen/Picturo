@@ -1,8 +1,17 @@
 <?php
 
-class Helper {
+namespace Core;
 
-  public static function loadConfig() {
+class Application {
+
+  private $config = array();
+
+  public function __construct() {
+    session_start();
+    $this->config = $this->loadConfig();
+  }
+
+  public function loadConfig() {
     if(!file_exists(CONF_DIR .'config.php')) {
       return array();
     }
@@ -12,7 +21,7 @@ class Helper {
 
     $defaults = array(
       'site_title' => 'Picturo',
-      'base_url' => self::base_url(),
+      'base_url' => $this->getBaseUrl(),
       'theme' => 'default',
       'date_format' => 'jS M Y',
       'twig_config' => array('cache' => false, 'autoescape' => false, 'debug' => false),
@@ -25,40 +34,35 @@ class Helper {
     } else {
       $config = $defaults;
     }
-
-    // Init sessions
-    if($config['private'] === true) {
-      session_start();
-    }
-
     return $config;
   }
 
-  public static function redirect($url) {
-    global $config;
 
-    header("Location: ". $config['base_url'] . "$url");
+  public function getConfig() {
+    return $this->config;
+  }
+
+  public function redirect($url) {
+    header("Location: ". $this->config['base_url'] . "$url");
     exit;
   }
 
-  public static function renderView($name, $twig_vars = array()) {
-    global $config;
-
+  public function renderView($name, $twig_vars = array()) {
     // Load the theme
-    Twig_Autoloader::register();
-    $loader = new Twig_Loader_Filesystem(THEMES_DIR . $config['theme']);
-    $twig = new Twig_Environment($loader, $config['twig_config']);
-    $twig->addExtension(new Twig_Extension_Debug());
-    $base_url = $config['base_url'];
-    $thumbnail_function = new Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height)  use($base_url) {
+    \Twig_Autoloader::register();
+    $loader = new \Twig_Loader_Filesystem(THEMES_DIR . $this->config['theme']);
+    $twig = new \Twig_Environment($loader, $this->config['twig_config']);
+    $twig->addExtension(new \Twig_Extension_Debug());
+    $base_url = $this->config['base_url'];
+    $thumbnail_function = new \Twig_SimpleFunction('picturo_thumbnail', function ($path, $width, $height)  use($base_url) {
       $imgTag = "<img src='" . $base_url . "/thumbnail/" . $width . "x" . $height . "/" . $path ."' width='$width' height='$height'/>";
       echo $imgTag;
     });
     $twig->addFunction($thumbnail_function);
     $twig_vars['view'] = $name;
-    $twig_vars['base_url'] = $config['base_url'];
-    $twig_vars['theme_url'] = $config['base_url'] .'/'. basename(THEMES_DIR) .'/'. $config['theme'];
-    $twig_vars['site_title'] = $config['site_title'];
+    $twig_vars['base_url'] = $this->config['base_url'];
+    $twig_vars['theme_url'] = $this->config['base_url'] .'/'. basename(THEMES_DIR) .'/'. $this->config['theme'];
+    $twig_vars['site_title'] = $this->config['site_title'];
     if(isset($_SESSION['username'])) {
       $twig_vars['username'] = $_SESSION['username'];
     } else {
@@ -69,21 +73,12 @@ class Helper {
     exit;
   }
 
-  public static function renderNotFound() {
-    // If 404 in theme render it
-    // Then render default 404 in src/views
-    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-    echo "<h1>iNot found</h1>";
-  }
-
-  //-- Private functions -------------------------------------------------------------------------- 
-
   /**
    * Helper function to work out the base URL
    *
    * @return string the base url
    */
-  private static function base_url() {
+  private static function getBaseUrl() {
     global $config;
     if(isset($config['base_url']) && $config['base_url']) return $config['base_url'];
 
@@ -98,7 +93,7 @@ class Helper {
     return rtrim(str_replace($url, '', $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']), '/');
   }
 
-  /**
+   /**
    * Tries to guess the server protocol. Used in base_url()
    *
    * @return string the current protocol
@@ -108,7 +103,8 @@ class Helper {
     if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'){
       $protocol = 'https';
     }
-    return $protocol; 
+    return $protocol;
   }
 
 }
+

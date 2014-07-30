@@ -1,6 +1,9 @@
-<?php 
+<?php
 
-class Thumbnail {
+
+namespace App\Controllers;
+
+class Thumbnail extends \Core\Controller {
 
   private $width;
 
@@ -10,7 +13,8 @@ class Thumbnail {
 
   private $cache_path;
 
-  public function __construct($width = 200, $height = 200, $path) {
+  public function __construct($app, $width = 200, $height = 200, $path) {
+    parent::__construct($app);
     $this->width = $width;
     $this->height = $height;
     $this->path = urldecode($path);

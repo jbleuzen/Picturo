@@ -27,3 +27,4 @@ $config['custom_setting'] = 'Hello'; 	// Can be accessed by {{ config.custom_set
 
 $config['private'] = true;
 $config['private_pass']['admin'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';
+$config['private_pass']['toto'] = 'd033e22ae348aeb5660fc2140aec35850c4da997';

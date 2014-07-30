@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 /**
  * Picturo
  *
@@ -8,7 +10,7 @@
  * @license http://opensource.org/licenses/MIT
  * @version 0.6.2
  */
-class Picturo {
+class Picturo extends \Core\Controller {
 
   private $current_page = 0;
 
@@ -23,6 +25,10 @@ class Picturo {
   private $images = array();
 
   private $breadcrumb = array();
+
+  public function __construct($app) {
+    parent::__construct($app);
+  }
 
   public function displayFolder($path, $page) {
     global $config;
@@ -91,7 +97,7 @@ class Picturo {
         'page_count' => $this->page_count,
         'current_page' => $this->current_page
       );
-      Helper::renderView('gallery', $twig_vars);
+      $this->app->renderView('gallery', $twig_vars);
     }
 
     header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
@@ -128,10 +134,10 @@ class Picturo {
         "image_previous_url" =>  $config['base_url'] . "/" . str_replace(CONTENT_DIR, "", $previous),
         "image_next_url" => $config['base_url'] . "/" . str_replace(CONTENT_DIR, "", $next)
       );
-      Helper::renderView('detail', $view_vars);
+      $this->app->renderView('detail', $view_vars);
     }
 
-    Helper::renderNotFound();
+    $this->app->renderNotFound();
   }
 
 
@@ -193,3 +199,4 @@ class Picturo {
 }
 
 ?>
+
