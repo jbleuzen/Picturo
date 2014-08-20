@@ -45,7 +45,7 @@ class Picturo extends \Core\Controller {
       foreach($this->foldersPath as $folder) {
         $tmp_array = array();
         $tmp_array['name'] = basename($folder);
-        $files = glob("$folder/*.{jpg,jpeg,JPG,JPEG}", GLOB_BRACE);
+        $files = glob("$folder/*.{jpg,jpeg,png,JPG,JPEG,PNG}", GLOB_BRACE);
         $tmp_array['images_count'] = count($files);
 
         $temp_url = '/' . $this->url . "/" . urlencode($tmp_array['name']);
@@ -187,7 +187,7 @@ class Picturo extends \Core\Controller {
           if( is_dir($file)){
             array_push($this->foldersPath, $file);
           }
-          if(is_file($file) && preg_match("/.jpg/i", $file)) {
+          if(is_file($file) && preg_match("/.jpg|.jpeg|.png/i", $file)) {
             array_push($this->imagesPath, $file);
           }
         }

@@ -41,7 +41,13 @@ class Thumbnail extends \Core\Controller {
 
 
   private function generate($src, $dest, $thumb_w = 164, $thumb_h = 164) {
-    $srcimg = imagecreatefromjpeg($src);
+    $ext = pathinfo($src, PATHINFO_EXTENSION);
+    if($ext == "jpg" || $ext == "jpeg") {
+      $srcimg = imagecreatefromjpeg($src);
+    }
+    if($ext == "png") {
+      $srcimg = imagecreatefrompng($src);
+    }
     $src_w = imagesx($srcimg);
     $src_h = imagesy($srcimg);
     $src_ratio = $src_w/$src_h;
@@ -61,7 +67,12 @@ class Thumbnail extends \Core\Controller {
     imagedestroy($newpic);
     imagedestroy($srcimg);
 
-    imagejpeg($final, $dest, 80); //again, assuming jpeg, 80% quality
+    if($ext == "jpg" || $ext == "jpeg") {
+      imagejpeg($final, $dest, 80); //again, assuming jpeg, 80% quality
+    }
+    if($ext == "png") {
+      imagepng($final, $dest, 0); //again, assuming jpeg, 80% quality
+    }
   }
 
 
